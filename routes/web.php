@@ -17,6 +17,7 @@ use App\Http\Controllers\Administracao\PlanoController;
 use App\Http\Controllers\Administracao\ServicoController;
 use App\Http\Controllers\Administracao\UserController;
 
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -66,6 +67,10 @@ Route::get('/logout', [LoginController::class, 'logout'])->name('login.logout')-
 Route::group(['middleware' => ['auth']], function () {
 
     Route::get('/home', [AdministracaoController::class, 'home'])->name('home');
+
+
+    Route::resource('sales/category', App\Http\Controllers\Modules\Sales\CategoryController::class)->names('sales.category');
+
 
     // Routas Organizacao
 

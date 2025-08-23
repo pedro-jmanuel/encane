@@ -5,7 +5,7 @@
         <script>
           document.write(new Date().getFullYear());
         </script>
-        <a href="#" target="_blank" class="footer-link fw-bolder"></a> <span class="footer-link fw-bolder">Vida Tec</span>
+        <a href="#" target="_blank" class="footer-link fw-bolder"></a> <span class="footer-link fw-bolder"><a target="_blank" href="http://feta.ao">Feta</a></span>
       </div>
     </div>
   </footer>
