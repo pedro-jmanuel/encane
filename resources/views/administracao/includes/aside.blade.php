@@ -249,5 +249,26 @@
 
         </ul>
       </li>
+
+      <li class="menu-item">
+        <a href="javascript:void(0)" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons bx bx-cube"></i>
+          <div data-i18n="User interface">Artigo</div>
+        </a>
+        <ul class="menu-sub">
+          <li class="menu-item">
+            <a href="{{route("sales.item.create")}}" class="menu-link">
+              <div data-i18n="Accordion">Criar novo</div>
+            </a>
+          </li>
+
+          <li class="menu-item">
+            <a href="{{route("sales.item.index")}}" class="menu-link">
+              <div data-i18n="List Groups">Ver todos</div>
+            </a>
+          </li>
+
+        </ul>
+      </li>
     </ul>
   </aside>

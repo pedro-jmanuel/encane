@@ -70,6 +70,8 @@ Route::group(['middleware' => ['auth']], function () {
 
 
     Route::resource('sales/category', App\Http\Controllers\Modules\Sales\CategoryController::class)->names('sales.category');
+    Route::resource('sales/item', App\Http\Controllers\Modules\Sales\ItemController::class)->names('sales.item');
+
 
 
     // Routas Organizacao
