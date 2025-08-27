@@ -20,6 +20,10 @@ return new class extends Migration
             $table->decimal('price', 15, 2);
             $table->decimal('tax_rate', 5, 2)->default(0); // percentagem
             $table->enum('item_type', ['PRODUCT', 'SERVICE']);
+            $table->foreignId('category_id')
+                  ->nullable()
+                  ->constrained('sales_categories')
+                  ->nullOnDelete();
             $table->timestamps();
         });
     }

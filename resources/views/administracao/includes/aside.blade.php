@@ -231,7 +231,7 @@
 
       <li class="menu-item">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
-          <i class="menu-icon tf-icons bx bx-cube"></i>
+          <i class="menu-icon tf-icons bx  bx-tag"></i>
           <div data-i18n="User interface">Categoria</div>
         </a>
         <ul class="menu-sub">
@@ -252,7 +252,7 @@
 
       <li class="menu-item">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
-          <i class="menu-icon tf-icons bx bx-cube"></i>
+          <i class="menu-icon tf-icons bx  bx-package"></i>
           <div data-i18n="User interface">Artigo</div>
         </a>
         <ul class="menu-sub">

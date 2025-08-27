@@ -21,7 +21,7 @@
             @method('PUT')
             @csrf
           <div class="mb-3">
-            <label class="form-label" for="basic-default-fullname">Nome</label>
+            <label class="form-label" for="name">Nome</label>
             <input value="{{$category->name}}" name="name" type="text" class="form-control  @error('name') is-invalid @enderror" id="basic-default-fullname" placeholder="" />
             @error('name')
                 <small class="text-danger">{{ $message }}</small>
@@ -29,7 +29,7 @@
         </div>
 
           <div class="mb-3">
-            <label class="form-label" for="basic-default-message">Descrição</label>
+            <label class="form-label" for="summernote">Descrição</label>
             <textarea
               name="description"
               id="summernote"

@@ -23,6 +23,7 @@ class StoreItemRequest extends FormRequest
             'price' => 'required|max:255',
             'tax_rate'   => 'required|max:255',
             'item_type'  => 'required|max:255',
+            'category_id'=> 'required|max:255',
             'description' => '',
         ];
     }
@@ -35,6 +36,7 @@ class StoreItemRequest extends FormRequest
             'tax_rate.required' => 'A taxa de imposto é obrigatório',
             'item_type.required' => 'O tipo é obrigatório',
             'description'     => '',
+            'category_id.required'=> 'A categoria é obrigatorio',
         ];
     }
 }

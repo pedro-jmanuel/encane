@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Modules\Sales;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Modules\Sales\Item\StoreItemRequest;
 use App\Http\Requests\Modules\Sales\Item\UpdateItemRequest;
+use App\Models\Sales\Category;
 use App\Models\Sales\Item;
 use Illuminate\Http\Request;
 
@@ -29,7 +30,8 @@ class ItemController extends Controller
      */
     public function create()
     {
-        return view("modules.sales.item.create");
+        $data["categories"] = Category::all();
+        return view("modules.sales.item.create",$data);
     }
 
     /**
@@ -65,6 +67,7 @@ class ItemController extends Controller
     public function edit($id)
     {
         $data['item'] = Item::find($id);
+        $data["categories"] = Category::all();
 
         if ($data['item'] == NULL)
             return view('errors.404');

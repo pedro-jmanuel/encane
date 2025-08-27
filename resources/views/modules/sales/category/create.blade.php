@@ -21,16 +21,28 @@
         @endif
         <form action="{{route('sales.category.store')}}" method="POST" enctype="multipart/form-data">
             @csrf
-          <div class="mb-3">
-            <label class="form-label" for="basic-default-fullname">Nome</label>
-            <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" id="basic-default-fullname" placeholder="" />
-            @error('name')
-                <small class="text-danger">{{ $message }}</small>
-            @enderror
-          </div>
+            <div class="row">
+                <div class="mb-3 col-md-6">
+              <label class="form-label" for="name">Nome</label>
+              <input name="name" type="text" class="form-control @error('name') is-invalid @enderror" id="basic-default-fullname" placeholder="" />
+              @error('name')
+                  <small class="text-danger">{{ $message }}</small>
+              @enderror
+            </div>
+
+             <div class="mb-3 col-md-6">
+              <label class="form-label" for="code">Código</label>
+              <input name="code" type="text" class="form-control @error('code') is-invalid @enderror" id="basic-default-fullname" placeholder="" />
+              @error('code')
+                  <small class="text-danger">{{ $message }}</small>
+              @enderror
+            </div>
+
+            </div>
+          
 
           <div class="mb-3">
-            <label class="form-label" for="basic-default-message">Descrição</label>
+            <label class="form-label" for="summernote">Descrição</label>
             <textarea
               name="description"
               id="summernote"

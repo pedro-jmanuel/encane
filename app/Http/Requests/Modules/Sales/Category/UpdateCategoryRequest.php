@@ -26,6 +26,7 @@ class UpdateCategoryRequest extends FormRequest
         return [
             'name'      => 'required|max:255',
             'description' => '',
+            'code'=> 'required|unique:sales_categories|max:255',
         ];
     }
 
@@ -33,6 +34,7 @@ class UpdateCategoryRequest extends FormRequest
     {
         return [
             'name.required' => 'O nome é obrigatório',
+            'code.unique' => 'Já existe uma categoria com esse código',
             'description'     => '',
         ];
     }

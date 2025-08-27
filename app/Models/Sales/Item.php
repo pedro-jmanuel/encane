@@ -15,6 +15,7 @@ class Item extends Model
         "description",
         "price",
         "tax_rate",
-        "item_type"
+        "item_type",
+        "category_id"
      ];
 }

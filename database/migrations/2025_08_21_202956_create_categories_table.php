@@ -15,8 +15,9 @@ return new class extends Migration
     {
         Schema::create('sales_categories', function (Blueprint $table) {
             $table->id();
-             $table->string('name');
-             $table->string('description')->nullable();
+            $table->string('name');
+            $table->string('code')->unique();
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }
