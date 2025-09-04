@@ -20,4 +20,16 @@ class ItemAttribute extends Model
     use HasFactory;
     protected $table = 'sales_item_attributes';
 
+    protected $fillable = [
+        "sales_item_id",
+        "attribute_name",
+        "attribute_value",
+     ];
+
+
+    public function item()
+    {
+        return $this->belongsTo(Item::class, 'sales_item_id');
+    }
+
 }

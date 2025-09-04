@@ -14,7 +14,7 @@
 
     <ul class="menu-inner py-1">
       <!-- Dashboard -->
-      <li class="menu-item active">
+      <li class="menu-item {{ Route::is('home') ? 'active' : '' }}">
         <a href="{{route('home')}}" class="menu-link">
           <i class="menu-icon tf-icons bx bx-home-circle"></i>
           <div data-i18n="Analytics">Início</div>
@@ -58,7 +58,7 @@
             </a>
           </li>
         </ul>
-      </li> --}}
+      </li> 
       <li class="menu-item">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx bx-box"></i>
@@ -87,7 +87,7 @@
           </li>
         </ul>
       </li>
-
+      --}}
       {{-- <li class="menu-item">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
             <i class="menu-icon tf-icons bx bx-support"></i>
@@ -108,19 +108,19 @@
 
         </ul>
       </li> --}}
-      <li class="menu-item">
+      <li class="menu-item {{ Route::is('organizacao.*') ? 'active open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx bx-cube"></i>
           <div data-i18n="User interface">Organização</div>
         </a>
         <ul class="menu-sub">
-          <li class="menu-item">
+          <li class="menu-item {{ Route::is('organizacao.create') ? 'active' : '' }}">
             <a href="{{route("organizacao.create")}}" class="menu-link">
               <div data-i18n="Accordion">Criar nova</div>
             </a>
           </li>
 
-          <li class="menu-item">
+          <li class="menu-item {{ Route::is('organizacao.index') ? 'active' : '' }}">
             <a href="{{route("organizacao.index")}}" class="menu-link">
               <div data-i18n="List Groups">Ver todos</div>
             </a>
@@ -198,13 +198,13 @@
         </ul>
       </li> --}}
 
-      <li class="menu-item">
+      <li class="menu-item {{ Route::is('inscrito.*') ? 'active open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx bx-receipt"></i>
           <div data-i18n="User interface">Newsletter</div>
         </a>
         <ul class="menu-sub">
-          <li class="menu-item">
+          <li class="menu-item {{ Route::is('inscrito.index') ? 'active' : '' }}">
             <a href="{{route("inscrito.index")}}" class="menu-link">
               <div data-i18n="List Groups">Ver todos</div>
             </a>
@@ -212,14 +212,14 @@
 
         </ul>
       </li>
-      <li class="menu-item">
+      <li class="menu-item {{ Route::is('pagina.*') ? 'active open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx  bxs-layout"></i>
           <div data-i18n="User interface">Pagínas</div>
         </a>
         <ul class="menu-sub">
 
-          <li class="menu-item">
+          <li class="menu-item {{ Route::is('pagina.index') ? 'active' : '' }}">
             <a href="{{route("pagina.index")}}" class="menu-link">
               <div data-i18n="List Groups">Ver todas</div>
             </a>
@@ -227,21 +227,19 @@
 
         </ul>
       </li>
-
-
-      <li class="menu-item">
+      <li class="menu-item {{ Route::is('sales.category.*') ? 'active open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx  bx-tag"></i>
           <div data-i18n="User interface">Categoria</div>
         </a>
         <ul class="menu-sub">
-          <li class="menu-item">
-            <a href="{{route("sales.category.create")}}" class="menu-link">
+          <li class="menu-item {{ Route::is('sales.category.create') ? 'active' : '' }}">
+            <a href="{{route("sales.category.create")}}" class="menu-link ">
               <div data-i18n="Accordion">Criar nova</div>
             </a>
           </li>
 
-          <li class="menu-item">
+          <li class="menu-item {{ Route::is('sales.category.index') ? 'active' : '' }}">
             <a href="{{route("sales.category.index")}}" class="menu-link">
               <div data-i18n="List Groups">Ver todos</div>
             </a>
@@ -250,20 +248,41 @@
         </ul>
       </li>
 
-      <li class="menu-item">
+      <li class="menu-item {{ Route::is('sales.item.*') ? 'active open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx  bx-package"></i>
           <div data-i18n="User interface">Artigo</div>
         </a>
         <ul class="menu-sub">
-          <li class="menu-item">
+          <li class="menu-item {{ Route::is('sales.item.create') ? 'active' : '' }}">
             <a href="{{route("sales.item.create")}}" class="menu-link">
               <div data-i18n="Accordion">Criar novo</div>
             </a>
           </li>
 
-          <li class="menu-item">
+          <li class="menu-item {{ Route::is('sales.item.index') ? 'active' : '' }}">
             <a href="{{route("sales.item.index")}}" class="menu-link">
+              <div data-i18n="List Groups">Ver todos</div>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+
+      <li class="menu-item {{ Route::is('sales.order.*') ? 'active open' : '' }}">
+        <a href="javascript:void(0)" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons bx  bx-cart"></i>
+          <div data-i18n="User interface">Pedidos</div>
+        </a>
+        <ul class="menu-sub">
+          <li class="menu-item {{ Route::is('sales.order.create') ? 'active' : '' }}">
+            <a href="{{route("sales.order.create")}}" class="menu-link">
+              <div data-i18n="Accordion">Criar novo</div>
+            </a>
+          </li>
+
+          <li class="menu-item {{ Route::is('sales.order.index') ? 'active' : '' }}">
+            <a href="{{route("sales.order.index")}}" class="menu-link">
               <div data-i18n="List Groups">Ver todos</div>
             </a>
           </li>

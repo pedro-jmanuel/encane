@@ -19,9 +19,10 @@ class ItemController extends Controller
     public function index()
     {
 
-         $data["items"] = Item::paginate(10);
+        $data["items"] = Item::paginate(10);
         return view("modules.sales.item.index",$data);
     }
+
 
     /**
      * Show the form for creating a new resource.

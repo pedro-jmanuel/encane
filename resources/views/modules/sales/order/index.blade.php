@@ -1,10 +1,10 @@
 @extends('administracao.master')
 @section('content')
 
-<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Categoria /</span> Ver todas</h4>
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Pedidos /</span> Ver todos</h4>
 
 <div class="card">
-    <h5 class="card-header">Categoria </h5>
+    <h5 class="card-header">Pedidos </h5>
     <div class="table-responsive text-nowrap">
 
       <table class="table table-hover">
@@ -21,25 +21,40 @@
         <thead>
           <tr>
             <th>#</th>
-            <th>Nome</th>
+            <th>Código</th>
+            <th>Valor total</th>
+            <th>Estado</th>
+            <th>Data Vencimento</th>
             <th>Opções</th>
           </tr>
         </thead>
         <tbody class="table-border-bottom-0">
-         @forelse ($categories as $category)
-            <tr onclick="window.location='{{ route('sales.category.edit', $category->id) }}'" style="cursor:pointer;">
+         @forelse ($orders as $order)
+            <tr onclick="window.location='{{ route('sales.order.edit', $order->id) }}'" style="cursor:pointer;">
                 <td>{{$loop->index + 1}}</td>
-                <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{$category->name}}</td>
+                <td>{{$order->id}}</td>
+                <td class="text-end"> {{$order->total_amount}}</td>
+                <td>
+                  {{-- TODO: Melhorar este forma de acesso, pode ser muito custoso --}}
+                  <span
+                        data-bs-toggle="tooltip"
+                        data-bs-offset="0,4"
+                        data-bs-placement="top"
+                        data-bs-html="true"
+                        title="<span>{{ collect($order_status)->firstWhere('value',$order->status)['help'] ?? null }}</span>" class="{{ collect($order_status)->firstWhere('value',$order->status)['span_class'] ?? null }}" >{{ collect($order_status)->firstWhere('value',$order->status)['label'] ?? null }}</span> </td>
+                <td> {{$order->due_date}}</td>
+
+
                 <td>
                 <div class="dropdown">
                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">
                     <i class="bx bx-dots-vertical-rounded"></i>
                     </button>
                     <div class="dropdown-menu">
-                    <a class="dropdown-item" href="{{route('sales.category.edit',["category" => $category->id])}}"
+                    <a class="dropdown-item" href="{{route('sales.order.edit',["order" => $order->id])}}"
                         ><i class="bx bx-edit-alt me-1"></i> Editar</a
                     >
-                    <form action="{{ route('sales.category.destroy', $category->id) }}" 
+                    <form action="{{ route('sales.order.destroy', $order->id) }}" 
                           method="POST" 
                           style="display:inline;">
                         @csrf
@@ -62,7 +77,7 @@
       </table>
     </div>
     <div class="container my-3">
-        {{ $categories->links() }}
+        {{ $orders->links() }}
     </div>
   </div>
 

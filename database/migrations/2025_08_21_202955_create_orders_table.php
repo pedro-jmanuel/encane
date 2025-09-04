@@ -18,7 +18,7 @@ return new class extends Migration
                 $table->foreignId('sales_customer_id')->constrained('sales_customers')->cascadeOnDelete();
                 $table->dateTime('order_date');
                 $table->dateTime('due_date')->nullable();
-                $table->enum('status', ['DRAFT','PENDING','PAID','CANCELLED','COMPLETED'])->default('DRAFT');
+                $table->enum('status', ['DRAFT','PENDING','CANCELLED','COMPLETED'])->default('DRAFT');
                 /* 
                     Estados possíveis para Order
                         draft → pedido ainda não confirmado.

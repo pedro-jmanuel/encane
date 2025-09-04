@@ -13,9 +13,24 @@ class Item extends Model
     protected $fillable = [
         "name",
         "description",
-        "price",
+        "price", // TODO:  Adicionar coluna preço de compra/custo
         "tax_rate",
         "item_type",
         "category_id"
      ];
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class, 'category_id');
+    }
+
+    public function orderItems()
+    {
+        return $this->hasMany(OrderItem::class, 'item_id');
+    }
+
+    public function attributes()
+    {
+        return $this->hasMany(ItemAttribute::class, 'item_id');
+    }
 }

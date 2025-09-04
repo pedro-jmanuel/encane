@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Modules\SalesApi\ItemApiController;
+use App\Http\Controllers\Modules\SalesApi\OrderApiController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -19,3 +21,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
+Route::apiResource('sales/item', ItemApiController::class);
+Route::apiResource('sales/order', OrderApiController::class); 
+Route::get('sales/order/{order}/items',[OrderApiController::class,'order_items']);

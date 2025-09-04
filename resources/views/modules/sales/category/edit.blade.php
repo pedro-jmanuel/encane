@@ -2,6 +2,8 @@
 @section('content')
 
 <!-- Basic Layout -->
+<h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Categoria /</span> Editar</h4>
+
 <div class="row">
   <div class="col-xl">
     <div class="card mb-4">

@@ -27,7 +27,7 @@
         </thead>
         <tbody class="table-border-bottom-0">
          @forelse ($items as $item)
-            <tr>
+            <tr onclick="window.location='{{ route('sales.item.edit', $item->id) }}'" style="cursor:pointer;">
                 <td>{{$loop->index + 1}}</td>
                 <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{$item->name}}</td>
                 <td>
