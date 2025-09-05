@@ -1,8 +1,33 @@
 @extends('administracao.master')
 @section('content')
     <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Pedidos /</span> Editar</h4>
+
     <div class="row">
-        <form action="{{ route('sales.order.update',["order"=> $order->id])}}" method="POST" enctype="multipart/form-data">
+        <form action="{{ route('sales.invoice.store') }}" method="POST" enctype="multipart/form-data">
+            @csrf
+            <input type="hidden" name="sales_order_id" value="{{$order->id}}">
+            <div class="col-lg-12 col-sm-12 col-12">
+
+                <div class="btn-group my-2" id="dropdown-icon-demo">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bx bx-menu"></i> Ações
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <button type="submit" class="dropdown-item d-flex align-items-center"><i
+                                    class=""></i>Gerar Factura</button>
+                        </li>
+                    </ul>
+                </div>
+               
+            </div>
+             
+        </form>
+    </div>
+    <div class="row">
+        <form action="{{ route('sales.order.update', ['order' => $order->id]) }}" method="POST"
+            enctype="multipart/form-data">
             @csrf
             @method('PUT')
             <div class="col-xl-12 col-xl-12">
@@ -42,12 +67,19 @@
                             <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ session('erro') }}.</div>
                         @endif
 
+                        @if (session('erro'))
+                            <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ session('erro') }}.</div>
+                        @endif
+                        
+                        @error('sales_order_id')
+                                <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ $message }}</div>
+                        @enderror
 
                         <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="name">Nome</label>
-                                    <input name="name" type="text" value="{{$order->customer->name}}"
+                                    <input name="name" type="text" value="{{ $order->customer->name }}"
                                         class="form-control @error('name') is-invalid @enderror" id="name"
                                         placeholder="" />
                                     @error('name')
@@ -56,7 +88,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="phone">Telefone</label>
-                                    <input name="phone" type="text" value="{{$order->customer->phone}}"
+                                    <input name="phone" type="text" value="{{ $order->customer->phone }}"
                                         class="form-control @error('phone') is-invalid @enderror" id="phone"
                                         placeholder="" />
                                     @error('phone')
@@ -65,7 +97,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="tax_number">NIF</label>
-                                    <input name="tax_number" type="text" value="{{$order->customer->tax_number}}"
+                                    <input name="tax_number" type="text" value="{{ $order->customer->tax_number }}"
                                         class="form-control @error('tax_number') is-invalid @enderror" id="tax_number"
                                         placeholder="" />
                                     @error('tax_number')
@@ -74,7 +106,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="email">Email</label>
-                                    <input name="email" type="text" value="{{$order->customer->email}}"
+                                    <input name="email" type="text" value="{{ $order->customer->email }}"
                                         class="form-control @error('email') is-invalid @enderror" id="email"
                                         placeholder="" />
                                     @error('email')
@@ -83,7 +115,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="address">Endereço</label>
-                                    <input name="address" type="text" value="{{$order->customer->address}}"
+                                    <input name="address" type="text" value="{{ $order->customer->address }}"
                                         class="form-control @error('address') is-invalid @enderror" id="address"
                                         placeholder="" />
                                     @error('address')
@@ -98,7 +130,8 @@
                             <div class="row">
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label" for="quantity">Data de Vencimento</label>
-                                    <input name="due_date" type="date" min="0" value="{{ \Carbon\Carbon::parse($order->due_date)->format('Y-m-d') }}"
+                                    <input name="due_date" type="date" min="0"
+                                        value="{{ \Carbon\Carbon::parse($order->due_date)->format('Y-m-d') }}"
                                         class="form-control @error('due_date') is-invalid @enderror" id="due_date"
                                         placeholder="" />
                                     @error('due_date')
@@ -108,7 +141,7 @@
                             </div>
                             <div id="app">
                                 <h4 class="fw-bold py-3 mb-2">Linhas de pedido</h4>
-                                
+
                                 <div v-for="(row, index) in rows" :key="index" class="row mb-3">
                                     <!-- Artigo -->
                                     <div class="mb-3 col-md-4">
@@ -170,9 +203,9 @@
                                         id="status" aria-label="Default select example">
                                         <option value="" selected disabled>Selecione</option>
                                         @foreach ($order_status as $status)
-                                            <option value="{{ $status['value'] }}" @if ($status['value'] == $order->status)
-                                                @selected(true)
-                                            @endif>{{ $status['label'] }}</option>
+                                            <option value="{{ $status['value'] }}"
+                                                @if ($status['value'] == $order->status) @selected(true) @endif>
+                                                {{ $status['label'] }}</option>
                                         @endforeach
 
                                     </select>
@@ -204,7 +237,7 @@
         createApp({
             data() {
                 return {
-                    order: {{$order->id}},
+                    order: {{ $order->id }},
                     items: [],
                     rows: [{
                         sales_item_id: '',
@@ -215,7 +248,7 @@
                 };
             },
             mounted() {
-                
+
                 console.log("OREDER ID : " + this.order);
 
                 const baseUrl = window.location.origin;
@@ -226,8 +259,8 @@
                         console.log();
                     })
                     .catch(error => console.error('Erro ao carregar itens:', error));
-                
-                
+
+
                 fetch(baseUrl + '/api/sales/order/' + this.order + '/items')
                     .then(response => response.json())
                     .then(data => {
@@ -235,7 +268,7 @@
                         console.log('XXXX', data);
                     })
                     .catch(error => console.error('Erro ao carregar itens:', error));
-                    
+
             },
             methods: {
                 addRow() {

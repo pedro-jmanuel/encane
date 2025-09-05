@@ -15,7 +15,7 @@ return new class extends Migration
     {
         Schema::create('sales_invoices', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('sales_order_id')->constrained('sales_orders')->cascadeOnDelete();
+            $table->foreignId('sales_order_id')->unique()->constrained('sales_orders')->cascadeOnDelete();
             $table->dateTime('invoice_date');
             $table->enum('payment_status', ['DRAFT', 'ISSUED','UNPAID', 'PAID','PARTIALLY_PAID','CANCELLED'])->default('DRAFT');
             /* 
@@ -23,11 +23,13 @@ return new class extends Migration
                     draft → rascunho, ainda não é documento fiscal válido.
                     issued (ou open) → fatura emitida, aguardando pagamento.
                     paid → totalmente paga.
+                    unpaid → já devia ter sido pago, mas não foi
                     partially_paid → parcialmente paga.
                     cancelled (ou void) → fatura anulada.
+
             */
             $table->decimal('total_paid', 15, 2)->default(0);
-            $table->decimal('balance_due', 15, 2)->default(0);
+            $table->decimal('balance_due', 15, 2)->default(0); // balance_due serve para acompanhar quanto ainda falta pagar em uma fatura, caso pague parcialmente.
             $table->timestamps();
         });
     }

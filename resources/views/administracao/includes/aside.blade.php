@@ -272,7 +272,7 @@
       <li class="menu-item {{ Route::is('sales.order.*') ? 'active open' : '' }}">
         <a href="javascript:void(0)" class="menu-link menu-toggle">
           <i class="menu-icon tf-icons bx  bx-cart"></i>
-          <div data-i18n="User interface">Pedidos</div>
+          <div data-i18n="User interface">Pedido</div>
         </a>
         <ul class="menu-sub">
           <li class="menu-item {{ Route::is('sales.order.create') ? 'active' : '' }}">
@@ -283,6 +283,20 @@
 
           <li class="menu-item {{ Route::is('sales.order.index') ? 'active' : '' }}">
             <a href="{{route("sales.order.index")}}" class="menu-link">
+              <div data-i18n="List Groups">Ver todos</div>
+            </a>
+          </li>
+
+        </ul>
+      </li>
+      <li class="menu-item {{ Route::is('sales.invoice.*') ? 'active open' : '' }}">
+        <a href="javascript:void(0)" class="menu-link menu-toggle">
+          <i class="menu-icon tf-icons bx  bx-receipt"></i>
+          <div data-i18n="User interface">Factura</div>
+        </a>
+        <ul class="menu-sub">
+          <li class="menu-item {{ Route::is('sales.invoice.index') ? 'active' : '' }}">
+            <a href="{{route("sales.invoice.index")}}" class="menu-link">
               <div data-i18n="List Groups">Ver todos</div>
             </a>
           </li>
