@@ -110,7 +110,7 @@
 
                                 <div v-for="(row, index) in rows" :key="index" class="row mb-3">
                                     <!-- Artigo -->
-                                    <div class="mb-3 col-md-4">
+                                    <div class="mb-3 col-md-3">
                                         <label class="form-label">Artigo N: @{{ index }} </label>
                                         <select :name="`order_items[${index}][sales_item_id]`" class="form-select"
                                             v-model="row.sales_item_id" v-on:change="setPrice(row)">
@@ -148,6 +148,15 @@
                                         <input type="number" class="form-control" readonly :value="calcSubtotal(row)"
                                             :name="`order_items[${index}][subtotal]`">
                                     </div>
+
+                                     <div class="mb-3 col-md-1">
+                                        <label class="form-label" >&nbsp; &nbsp;&nbsp; ⁮</label>
+                                        <button type="button" class="btn btn-icon btn-danger" v-on:click="removeRow(index)">
+                                            <span class="tf-icons bx bx-trash"></span>
+                                        </button>
+                                    </div>
+
+                                 
                                 </div>
 
                                 <!-- Botão para adicionar linhas -->
@@ -229,6 +238,9 @@
                         unit_price: 0,
                         discount: 0
                     });
+                },
+                removeRow(index) {
+                    this.rows.splice(index, 1);
                 },
                 setPrice(row) {
                     const item = this.items.find(i => i.id == row.sales_item_id);

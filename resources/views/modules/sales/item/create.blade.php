@@ -42,24 +42,11 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label" for="tax_rate">Taxa de imposto (%)</label>
-                                <input name="tax_rate" type="number"
-                                    class="form-control @error('tax_rate') is-invalid @enderror" id="tax_rate"
+                                <label class="form-label" for="cost">Custo</label>
+                                <input name="cost" type="number"
+                                    class="form-control @error('cost') is-invalid @enderror" id="cost"
                                     placeholder="" />
-                                @error('tax_rate')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
-
-                            <div class="mb-3 col-md-6">
-                                <label for="item_type" class="form-label">Tipo</label>
-                                <select name="item_type" class="form-select @error('item_type') is-invalid @enderror"
-                                    id="item_type" aria-label="Default select example">
-                                    <option value="" selected disabled >Selecione</option>
-                                    <option value="PRODUCT">Produto</option>
-                                    <option value="SERVICE">Serviço</option>
-                                </select>
-                                @error('item_type')
+                                @error('cost')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -77,6 +64,41 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="sales_tax">Taxa de imposto Venda(%)</label>
+                                <input name="sales_tax" type="number"
+                                    class="form-control @error('sales_tax') is-invalid @enderror" id="sales_tax"
+                                    placeholder="" />
+                                @error('sales_tax')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label class="form-label" for="purchase_tax">Taxa de imposto Compra(%)</label>
+                                <input name="purchase_tax" type="number"
+                                    class="form-control @error('purchase_tax') is-invalid @enderror" id="purchase_tax"
+                                    placeholder="" />
+                                @error('purchase_tax')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            <div class="mb-3 col-md-6">
+                                <label for="item_type" class="form-label">Tipo</label>
+                                <select name="item_type" class="form-select @error('item_type') is-invalid @enderror"
+                                    id="item_type" aria-label="Default select example">
+                                    <option value="" selected disabled >Selecione</option>
+                                    <option value="PRODUCT">Produto</option>
+                                    <option value="SERVICE">Serviço</option>
+                                </select>
+                                @error('item_type')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                            
                         </div>
 
                         <div class="mb-3">

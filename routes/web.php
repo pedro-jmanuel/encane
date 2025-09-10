@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::resource('sales/item', App\Http\Controllers\Modules\Sales\ItemController::class)->names('sales.item');
     Route::resource('sales/order', App\Http\Controllers\Modules\Sales\OrderController::class)->names('sales.order');
     Route::resource('sales/invoice', App\Http\Controllers\Modules\Sales\InvoiceController::class)->names('sales.invoice');
+    Route::get('sales/pdf/invoice/{invoice}', [App\Http\Controllers\Modules\Sales\PdfDocumentsController::class, 'invoice_pdf'])->name('sales.pdf.invoice');
 
 
     // Routas Organizacao

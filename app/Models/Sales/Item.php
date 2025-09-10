@@ -14,7 +14,9 @@ class Item extends Model
         "name",
         "description",
         "price", // TODO:  Adicionar coluna preço de compra/custo
-        "tax_rate",
+        "cost",
+        "purchase_tax",
+        "sales_tax",
         "item_type",
         "category_id"
      ];

@@ -42,13 +42,48 @@
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+                                          <div class="mb-3 col-md-6">
+                                <label class="form-label" for="cost">Custo</label>
+                                <input value="{{$item->cost}}" name="cost" type="number"
+                                    class="form-control @error('cost') is-invalid @enderror" id="cost"
+                                    placeholder="" />
+                                @error('cost')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+                            
+                             <div class="mb-3 col-md-6">
+                                <label for="category_id" class="form-label">Categoria</label>
+                                <select name="category_id" class="form-select @error('category_id') is-invalid @enderror"
+                                    id="category_id" aria-label="Default select example">
+                                    <option value="" selected disabled >Selecione</option>
+                                    @foreach ($categories as $category)
+                                        <option @if ($category->id == $item->category_id)
+                                            selected
+                                        @endif value="{{$category->id}}">{{$category->name}}</option>     
+                                    @endforeach                     
+                                </select>
+                                @error('category_id')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
+
+                             <div class="mb-3 col-md-6">
+                                <label class="form-label" for="sales_tax">Taxa de imposto Venda(%)</label>
+                                <input value="{{$item->sales_tax}}" name="sales_tax" type="number"
+                                    class="form-control @error('sales_tax') is-invalid @enderror" id="sales_tax"
+                                    placeholder="" />
+                                @error('sales_tax')
+                                    <small class="text-danger">{{ $message }}</small>
+                                @enderror
+                            </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label" for="tax_rate">Taxa de imposto</label>
-                                <input name="tax_rate" value="{{$item->tax_rate}}" type="number"
-                                    class="form-control @error('tax_rate') is-invalid @enderror" id="tax_rate"
+                                <label class="form-label" for="purchase_tax">Taxa de imposto Compra(%)</label>
+                                <input value="{{$item->purchase_tax}}" name="purchase_tax" type="number"
+                                    class="form-control @error('purchase_tax') is-invalid @enderror" id="purchase_tax"
                                     placeholder="" />
-                                @error('tax_rate')
+                                @error('purchase_tax')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
@@ -66,21 +101,7 @@
                                 @enderror
                             </div>
 
-                            <div class="mb-3 col-md-6">
-                                <label for="category_id" class="form-label">Categoria</label>
-                                <select name="category_id" class="form-select @error('category_id') is-invalid @enderror"
-                                    id="category_id" aria-label="Default select example">
-                                    <option value="" selected disabled >Selecione</option>
-                                    @foreach ($categories as $category)
-                                        <option @if ($category->id == $item->category_id)
-                                            selected
-                                        @endif value="{{$category->id}}">{{$category->name}}</option>     
-                                    @endforeach                     
-                                </select>
-                                @error('category_id')
-                                    <small class="text-danger">{{ $message }}</small>
-                                @enderror
-                            </div>
+                           
                         </div>
 
                         <div class="mb-3">

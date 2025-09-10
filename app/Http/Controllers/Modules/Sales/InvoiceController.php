@@ -93,7 +93,13 @@ class InvoiceController extends Controller
      */
     public function show($id)
     {
-        //
+
+        $data['invoice'] = Invoice::find($id);
+        
+        if ($data['invoice'] == NULL)
+            return view('errors.404');
+
+        return view("modules.sales.invoice.show",$data);
     }
 
     /**

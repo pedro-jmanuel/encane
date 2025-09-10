@@ -27,7 +27,7 @@
         </thead>
         <tbody class="table-border-bottom-0">
          @forelse ($categories as $category)
-            <tr onclick="window.location='{{ route('sales.category.edit', $category->id) }}'" style="cursor:pointer;">
+            <tr>
                 <td>{{$loop->index + 1}}</td>
                 <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{$category->name}}</td>
                 <td>

@@ -18,7 +18,9 @@ return new class extends Migration
             $table->string('name');
             $table->text('description')->nullable();
             $table->decimal('price', 15, 2);
-            $table->decimal('tax_rate', 5, 2)->default(0); // percentagem
+            $table->decimal('cost', 15, 2)->default(0);
+            $table->decimal('purchase_tax', 5, 2)->default(0); // percentagem
+            $table->decimal('sales_tax', 5, 2)->default(0); // percentagem
             $table->enum('item_type', ['PRODUCT', 'SERVICE']);
             $table->foreignId('category_id')
                   ->nullable()

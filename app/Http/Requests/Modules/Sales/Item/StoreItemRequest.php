@@ -21,10 +21,12 @@ class StoreItemRequest extends FormRequest
         return [
             'name'  => 'required|max:255',
             'price' => 'required|max:255',
-            'tax_rate'   => 'required|max:255',
             'item_type'  => 'required|max:255',
             'category_id'=> 'required|max:255',
             'description' => '',
+            'sales_tax'=> '',
+            'purchase_tax'=> '',
+            'cost'=>''
         ];
     }
 
@@ -33,10 +35,12 @@ class StoreItemRequest extends FormRequest
         return [
             'name.required' => 'O nome é obrigatório',
             'price.required' => 'O preço é obrigatório',
-            'tax_rate.required' => 'A taxa de imposto é obrigatório',
             'item_type.required' => 'O tipo é obrigatório',
-            'description'     => '',
             'category_id.required'=> 'A categoria é obrigatorio',
+            'description' => '',
+            'sales_tax'=> '',
+            'purchase_tax'=> '',
+            'cost'=>''
         ];
     }
 }

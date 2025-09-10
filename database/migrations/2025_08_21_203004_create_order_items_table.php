@@ -19,6 +19,10 @@ return new class extends Migration
             $table->foreignId('sales_item_id')->constrained('sales_items')->cascadeOnDelete();
             $table->integer('quantity')->default(1);
             $table->decimal('unit_price', 15, 2);
+            
+            $table->decimal('purchase_tax', 5, 2)->default(0); // percentagem
+            $table->decimal('sales_tax', 5, 2)->default(0); // percentagem
+
             $table->decimal('discount', 15, 2)->default(0);
             $table->decimal('subtotal', 15, 2);
             $table->timestamps();

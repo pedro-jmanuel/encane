@@ -5,10 +5,10 @@
 
 <div class="card">
     <h5 class="card-header">Factura </h5>
-    <div class="table-responsive text-nowrap">
+    <div class="table-responsive text-nowrap ">
 
       <table class="table table-hover">
-        <div class="container">
+        <div class="container  mb-4">
             @if (session('sucesso'))
                 <div class="alert alert-success"><i class="bi bi-check-circle"></i> {{session('sucesso')}}.</div>
             @endif
@@ -32,7 +32,7 @@
         </thead>
         <tbody class="table-border-bottom-0">
          @forelse ($invoices as $invoice)
-            <tr onclick="window.location='{{ route('sales.invoice.edit', $invoice->id) }}'" style="cursor:pointer;">
+            <tr>
                 <td>{{$loop->index + 1}}</td>
                 <td>{{$invoice->id}}</td>
                 <td class="text-end"> {{$invoice->order->total_amount}}</td>
@@ -55,12 +55,17 @@
                     <i class="bx bx-dots-vertical-rounded"></i>
                     </button>
                     <div class="dropdown-menu">
+
+                    <a class="dropdown-item" href="{{route('sales.invoice.show',["invoice" => $invoice->id])}}"
+                        ><i class="bx bx-receipt me-1"></i> Visualizar</a
+                    >
                     <a class="dropdown-item" href="{{route('sales.invoice.edit',["invoice" => $invoice->id])}}"
                         ><i class="bx bx-edit-alt me-1"></i> Editar</a
                     >
                     <form action="{{ route('sales.invoice.destroy', $invoice->id) }}" 
                           method="POST" 
-                          style="display:inline;">
+                          style="display:inline;"
+                          >
                         @csrf
                         @method('DELETE')
 

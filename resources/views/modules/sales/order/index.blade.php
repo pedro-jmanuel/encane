@@ -30,7 +30,7 @@
         </thead>
         <tbody class="table-border-bottom-0">
          @forelse ($orders as $order)
-            <tr onclick="window.location='{{ route('sales.order.edit', $order->id) }}'" style="cursor:pointer;">
+            <tr>
                 <td>{{$loop->index + 1}}</td>
                 <td>{{$order->id}}</td>
                 <td class="text-end"> {{$order->total_amount}}</td>
