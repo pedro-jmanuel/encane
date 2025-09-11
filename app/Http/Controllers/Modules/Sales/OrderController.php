@@ -76,7 +76,7 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-       // $request->dd();
+       //$request->dd();
         
         try {
             
@@ -107,8 +107,8 @@ class OrderController extends Controller
                 $orderLine['sales_item_id']    = $order_item['sales_item_id'];
                 $orderLine['quantity']   = $order_item['quantity'];
                 $orderLine['unit_price'] = $order_item['unit_price'];
-                $orderLine['discount']   = $order_item['discount'];
-                $orderLine['subtotal']   = ($order_item['unit_price'] * $order_item['quantity']) - $order_item['discount'];
+                $orderLine['subtotal']   = $order_item['subtotal'];
+                $orderLine['sales_tax']  = $order_item['sales_tax'];
                 $orderLine['created_at'] = Carbon::now();
                 $orderLine['updated_at'] = Carbon::now();
                 $total_amount += $orderLine['subtotal'] ;

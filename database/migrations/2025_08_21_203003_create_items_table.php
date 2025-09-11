@@ -27,6 +27,7 @@ return new class extends Migration
                   ->constrained('sales_categories')
                   ->nullOnDelete();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

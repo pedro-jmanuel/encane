@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('address')->nullable();
             $table->string('tax_number')->nullable(); // NIF
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

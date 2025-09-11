@@ -4,7 +4,7 @@ namespace App\Models\Sales;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 /* Serve para guardar características opcionais e dinâmicas de um item
 
@@ -18,6 +18,8 @@ Mas muitas vezes, cada item pode ter variações ou detalhes extras que não jus
 class ItemAttribute extends Model
 {
     use HasFactory;
+    use SoftDeletes;
+    
     protected $table = 'sales_item_attributes';
 
     protected $fillable = [

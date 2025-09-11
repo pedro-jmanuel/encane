@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('attribute_name');
             $table->string('attribute_value');
             $table->timestamps();
+            
         });
     }
 

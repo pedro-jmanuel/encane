@@ -31,6 +31,7 @@ return new class extends Migration
             $table->decimal('total_paid', 15, 2)->default(0);
             $table->decimal('balance_due', 15, 2)->default(0); // balance_due serve para acompanhar quanto ainda falta pagar em uma fatura, caso pague parcialmente.
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 

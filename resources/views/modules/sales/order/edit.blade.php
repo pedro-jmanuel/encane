@@ -142,17 +142,16 @@
                             <div id="app">
                                 <h4 class="fw-bold py-3 mb-2">Linhas de pedido</h4>
 
-                                <div v-for="(row, index) in rows" :key="index" class="row mb-3">
+                               <div v-for="(row, index) in rows" :key="index" class="row mb-3">
                                     <!-- Artigo -->
-                                    <div class="mb-3 col-md-3">
-                                        <label class="form-label">Artigo N: @{{ index }} </label>
-                                        <select :name="`order_items[${index}][sales_item_id]`" class="form-select"
-                                            v-model="row.sales_item_id" v-on:change="setPrice(row)">
-                                            <option value="" disabled selected>Selecione</option>
-                                            <option v-for="i in items" :key="i.id" :value="i.id">
-                                                @{{ i.name }}
-                                            </option>
-                                        </select>
+                                   <div class="col-md-3">
+                                    <label class="form-label">Artigo</label>
+                                    <select  :name="`order_items[${index}][sales_item_id]`" v-model="row.sales_item_id" class="form-select">
+                                        <option value="" disabled>Selecione</option>
+                                        <option v-for="item in items" :key="item.id" :value="item.id">
+                                        @{{ item.name }}
+                                        </option>
+                                    </select>
                                     </div>
 
                                     <!-- Quantidade -->
@@ -169,11 +168,11 @@
                                             v-model.number="row.unit_price" :name="`order_items[${index}][unit_price]`">
                                     </div>
 
-                                    <!-- Desconto -->
+                                    <!-- Imposto -->
                                     <div class="mb-3 col-md-2">
-                                        <label class="form-label">Desconto <small>(Kz)</small></label>
-                                        <input type="number" min="0" class="form-control"
-                                            v-model.number="row.discount" :name="`order_items[${index}][discount]`">
+                                        <label class="form-label">Imposto Venda (%)</label>
+                                        <input type="number" min="0" class="form-control" readonly
+                                            v-model.number="row.sales_tax" :name="`order_items[${index}][sales_tax]`">
                                     </div>
 
                                     <!-- Subtotal -->
@@ -183,13 +182,14 @@
                                             :name="`order_items[${index}][subtotal]`">
                                     </div>
 
-                                    <div class="mb-3 col-md-1">
+                                     <div class="mb-3 col-md-1">
                                         <label class="form-label" >&nbsp; &nbsp;&nbsp; ⁮</label>
                                         <button type="button" class="btn btn-icon btn-danger" v-on:click="removeRow(index)">
                                             <span class="tf-icons bx bx-trash"></span>
                                         </button>
                                     </div>
 
+                                 
                                 </div>
 
                                 <!-- Botão para adicionar linhas -->
@@ -251,13 +251,12 @@
                         sales_item_id: '',
                         quantity: 1,
                         unit_price: 0,
-                        discount: 0
+                        discount: 0,
+                        sales_tax: 0
                     }]
                 };
             },
             mounted() {
-
-                console.log("OREDER ID : " + this.order);
 
                 const baseUrl = window.location.origin;
                 fetch(baseUrl + '/api/sales/item')
@@ -273,35 +272,33 @@
                     .then(response => response.json())
                     .then(data => {
                         this.rows = data;
-                        console.log('XXXX', data);
                     })
                     .catch(error => console.error('Erro ao carregar itens:', error));
 
             },
             methods: {
                 addRow() {
-                    this.rows.push({
-                        sales_item_id: '',
-                        quantity: 1,
-                        unit_price: 0,
-                        discount: 0
-                    });
+                    this.rows.push({ sales_item_id: "", quantity: 1, unit_price: 0, sales_tax: 0, discount: 0 });
+
                 },
                 removeRow(index) {
                     this.rows.splice(index, 1);
                 },
-                setPrice(row) {
-                    const item = this.items.find(i => i.id == row.sales_item_id);
-                    row.unit_price = item ? item.price : 0;
-                },
                 calcSubtotal(row) {
-                    return (row.quantity * row.unit_price) - row.discount;
-                }
+                    let item = this.items.find(i => i.id === row.sales_item_id);
+                    if (item) {
+                        row.unit_price = item.price;
+                        row.sales_tax = item.sales_tax;
+                    }
+                    let base = (row.quantity * row.unit_price) - row.discount;
+                    let tax = base * (row.sales_tax / 100);
+                    return base + tax;
+                },
             },
             computed: {
-                totalGeral() {
-                    return this.rows.reduce((acc, row) => acc + this.calcSubtotal(row), 0);
-                }
+                 totalGeral() {
+                    return this.rows.reduce((acc, row) => acc + this.calcSubtotal(row), 0).toFixed(2);
+                 }
             }
         }).mount("#app");
     </script>

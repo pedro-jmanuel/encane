@@ -21,6 +21,7 @@ return new class extends Migration
             $table->enum('method', ['CASH','TRANSFER','CARD','MOBILE_MONEY']);
             $table->string('reference_number')->nullable();
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
