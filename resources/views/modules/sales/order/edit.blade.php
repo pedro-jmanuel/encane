@@ -334,37 +334,9 @@
 
                 },
                 removeRow(index, rowId) {
-                    if (!rowId) {
-                        // Caso a linha ainda não exista no banco, só remove do front
-                        this.rows.splice(index, 1);
-                        return;
-                    }
-                    const token = document.querySelector('input[name="_token"]').value;
-                    const baseUrl = window.location.origin;
-
-                    fetch(`${baseUrl}/api/sales/order-item/${rowId}`, {
-                            method: "DELETE",
-                            headers: {
-                                "Content-Type": "application/json",
-                                "X-CSRF-TOKEN": token,
-                            },
-                        })
-                        .then((response) => {
-                            if (!response.ok) {
-                                throw new Error("Erro ao remover a linha de pedido");
-                            }
-                            return response.json();
-                        })
-                        .then((data) => {
-                            // Se apagou no servidor, remove do array local
-                            this.rows.splice(index, 1);
-                            showToast("Linha de pedido removido com sucesso","success");
-                        })
-                        .catch((error) => {
-                            console.error(error);
-                            showToast("Falha ao remover a linha de pedido","danger");
-                        });
-
+                        
+                    this.rows.splice(index, 1);
+                    return;        
                 },
 
                 calcSubtotal(row) {
