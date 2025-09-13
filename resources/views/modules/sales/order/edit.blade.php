@@ -28,6 +28,7 @@
     <div class="row">
         <form action="{{ route('sales.order.update', ['order' => $order->id]) }}" method="POST"
             enctype="multipart/form-data">
+            
             @csrf
             @method('PUT')
             <div class="col-xl-12 col-xl-12">
@@ -56,7 +57,8 @@
                             </button>
                         </li>
                     </ul>
-
+                    
+                   
                     <div class="tab-content">
                         @if (session('sucesso'))
                             <div class="alert alert-success"><i class="bi bi-check-circle"></i> {{ session('sucesso') }}.
@@ -67,15 +69,19 @@
                             <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ session('erro') }}.</div>
                         @endif
 
-                        @if (session('erro'))
-                            <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ session('erro') }}.</div>
+                        @if ($order->hasInvoice())
+                            <div class="alert alert-warning"><i class="bi bi-check-circle"></i> Este pedido já não pode ser alterado pois já foi criado uma factura.</div>
                         @endif
 
                         @error('sales_order_id')
                             <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ $message }}</div>
                         @enderror
-
                         <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
+                            @if ($order->hasInvoice())
+                                <fieldset disabled>
+                            @else
+                                <fieldset>
+                            @endif
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="name">Nome</label>
@@ -123,14 +129,19 @@
                                     @enderror
                                 </div>
                             </div>
+                            </fieldset>
                         </div>
                         <div class="tab-pane fade" id="navs-pills-justified-profile" role="tabpanel">
 
-
+                            @if ($order->hasInvoice())
+                                <fieldset disabled>
+                            @else
+                                <fieldset>
+                            @endif
                             <div class="row">
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label" for="quantity">Data de Vencimento</label>
-                                    <input name="due_date" type="date" min="0"
+                                    <input name="due_date" type="date" min="1"
                                         value="{{ \Carbon\Carbon::parse($order->due_date)->format('Y-m-d') }}"
                                         class="form-control @error('due_date') is-invalid @enderror" id="due_date"
                                         placeholder="" />
@@ -141,14 +152,14 @@
                             </div>
                             <div id="app">
                                 <h4 class="fw-bold py-3 mb-2">Linhas de pedido</h4>
-
+                                <span class="text-primary">@{{ loadingOrders ? "Carregando linhas do pedido..." : "" }}</span>
                                 <div v-for="(row, index) in rows" :key="row.id ?? index" class="row mb-3">
                                     <!-- Artigo -->
-                                    <div class="col-md-3">
+                                    <div class="mb-3 col-md-3 ">
                                         <label class="form-label">Artigo</label>
                                         <select :name="`order_items[${index}][sales_item_id]`" v-model="row.sales_item_id"
                                             class="form-select">
-                                            <option value="" disabled>Selecione</option>
+                                            <option value="" disabled>  @{{ loadingItems ? "Carregando artigos..." : "Selecione" }}</option>
                                             <option v-for="item in items" :key="item.id" :value="item.id">
                                                 @{{ item.name }}
                                             </option>
@@ -170,14 +181,14 @@
                                     </div>
 
                                     <!-- Imposto -->
-                                    <div class="mb-3 col-md-2">
+                                    <div class="mb-3 col-md-2 ">
                                         <label class="form-label">Imposto Venda (%)</label>
                                         <input type="number" min="0" class="form-control" readonly
                                             v-model.number="row.sales_tax" :name="`order_items[${index}][sales_tax]`">
                                     </div>
 
                                     <!-- Subtotal -->
-                                    <div class="mb-3 col-md-2">
+                                    <div class="mb-3 col-md-2 ">
                                         <label class="form-label">Subtotal <small>(Kz)</small></label>
                                         <input type="number" class="form-control" readonly :value="calcSubtotal(row)"
                                             :name="`order_items[${index}][subtotal]`">
@@ -190,8 +201,9 @@
                                             <span class="tf-icons bx bx-trash"></span>
                                         </button>
                                     </div>
-
-
+                                    <div class="divider divider-primary">
+                                        <div class="divider-text"></div>
+                                    </div>
                                 </div>
 
                                 <!-- Botão para adicionar linhas -->
@@ -204,8 +216,14 @@
                                     Total Geral: <span v-text="totalGeral"></span> Kz
                                 </div>
                             </div>
+                            </fieldset>
                         </div>
                         <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
+                            @if ($order->hasInvoice())
+                                <fieldset disabled>
+                            @else
+                                <fieldset>
+                            @endif
                             <div class="row">
                                 <div class="mb-3 col-md-4">
                                     <label for="status" class="form-label">Salvar pedido como?</label>
@@ -226,14 +244,13 @@
                                 <button type="submit" style="background-color: #005657; border-color: #005657;"
                                     class="btn btn-primary">Salvar</button>
                             </div>
-
+                            </fieldset>
                         </div>
-
-
+                       
                     </div>
-
                 </div>
             </div>
+            
         </form>
     </div>
 
@@ -289,6 +306,8 @@
         createApp({
             data() {
                 return {
+                    loadingItems: true,
+                    loadingOrders: true,
                     order: {{ $order->id }},
                     items: [],
                     rows: [{
@@ -302,26 +321,37 @@
                 };
             },
             mounted() {
-
-                const baseUrl = window.location.origin;
-                fetch(baseUrl + '/api/sales/item')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.items = data;
-                        console.log();
-                    })
-                    .catch(error => console.error('Erro ao carregar itens:', error));
-
-
-                fetch(baseUrl + '/api/sales/order/' + this.order + '/items')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.rows = data;
-                    })
-                    .catch(error => console.error('Erro ao carregar itens:', error));
-
+                this.fetchItems();
+                this.fetchOrders();
             },
             methods: {
+                async fetchItems(){
+                   try {
+                        this.loadingItems = true;
+                        const baseUrl = window.location.origin;
+                        const res = await fetch(`${baseUrl}/api/sales/item`);
+                        const data = await res.json();
+                        this.items = data;
+                    } catch (err) {
+                        console.error("Erro ao carregar artigos", err);
+                    } finally {
+                        this.loadingItems = false;
+                    }
+                },
+                async fetchOrders(){
+                   try {
+                        this.loadingOrders = true;
+                        const baseUrl = window.location.origin;
+                        const res = await fetch(`${baseUrl}/api/sales/order/${this.order}/items`);
+                        const data = await res.json();
+                        this.rows = data;
+                    } catch (err) {
+                        console.error("Erro ao carregar linhas do pedido", err);
+                    } finally {
+                        this.loadingOrders = false;
+                    }
+                },
+
                 addRow() {
                     this.rows.push({
                         id: undefined,

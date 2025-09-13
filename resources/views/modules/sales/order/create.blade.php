@@ -46,7 +46,7 @@
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="name">Nome</label>
-                                    <input name="name" type="text"
+                                    <input value="{{old('name')}}" name="name" type="text"
                                         class="form-control @error('name') is-invalid @enderror" id="name"
                                         placeholder="" />
                                     @error('name')
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="phone">Telefone</label>
-                                    <input name="phone" type="text"
+                                    <input value="{{old('phone')}}" name="phone" type="text"
                                         class="form-control @error('phone') is-invalid @enderror" id="phone"
                                         placeholder="" />
                                     @error('phone')
@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="tax_number">NIF</label>
-                                    <input name="tax_number" type="text"
+                                    <input value="{{old('tax_number')}}" name="tax_number" type="text"
                                         class="form-control @error('tax_number') is-invalid @enderror" id="tax_number"
                                         placeholder="" />
                                     @error('tax_number')
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="tax_number">Email</label>
-                                    <input name="email" type="text"
+                                    <input value="{{old('email')}}" name="email" type="text"
                                         class="form-control @error('email') is-invalid @enderror" id="email"
                                         placeholder="" />
                                     @error('email')
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="address">Endereço</label>
-                                    <input name="address" type="text"
+                                    <input value="{{old('address')}}" name="address" type="text"
                                         class="form-control @error('address') is-invalid @enderror" id="address"
                                         placeholder="" />
                                     @error('address')
@@ -97,7 +97,7 @@
                             <div class="row">
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label" for="quantity">Data de Vencimento</label>
-                                    <input name="due_date" type="date" min="0"
+                                    <input value="{{old('due_date')}}" name="due_date" type="datetime-local" min="1"
                                         class="form-control @error('due_date') is-invalid @enderror" id="due_date"
                                         placeholder="" />
                                     @error('due_date')
@@ -110,10 +110,10 @@
 
                                 <div v-for="(row, index) in rows" :key="index" class="row mb-3">
                                     <!-- Artigo -->
-                                   <div class="col-md-3">
+                                   <div class="mb-3 col-md-3">
                                     <label class="form-label">Artigo</label>
                                     <select  :name="`order_items[${index}][sales_item_id]`" v-model="row.sales_item_id" class="form-select">
-                                        <option value="" disabled>Selecione</option>
+                                        <option value="" disabled> @{{ loadingItems ? "Carregando artigos..." : "Selecione" }}</option>
                                         <option v-for="item in items" :key="item.id" :value="item.id">
                                         @{{ item.name }}
                                         </option>
@@ -154,7 +154,9 @@
                                             <span class="tf-icons bx bx-trash"></span>
                                         </button>
                                     </div>
-
+                                    <div class="divider divider-primary">
+                                        <div class="divider-text"></div>
+                                    </div>
                                  
                                 </div>
 
@@ -177,7 +179,11 @@
                                         id="status" aria-label="Default select example">
                                         <option value="" selected disabled>Selecione</option>
                                         @foreach ($order_status as $status)
-                                            <option value="{{ $status['value'] }}">{{ $status['label'] }}</option>
+                                            <option value="{{ $status['value'] }}"
+                                                @if (old('status')==$status['value'])
+                                                    selected
+                                                @endif
+                                            >{{ $status['label'] }}</option>
                                         @endforeach
 
                                     </select>
@@ -209,6 +215,7 @@
         createApp({
             data() {
                 return {
+                    loadingItems: true,
                     items: [],
                     rows: [{
                         sales_item_id: '',
@@ -220,17 +227,22 @@
                 };
             },
             mounted() {
-
-                const baseUrl = window.location.origin;
-                fetch(baseUrl + '/api/sales/item')
-                    .then(response => response.json())
-                    .then(data => {
-                        this.items = data;
-                        console.log();
-                    })
-                    .catch(error => console.error('Erro ao carregar itens:', error));
+               this.fetchItems();
             },
             methods: {
+                async fetchItems(){
+                   try {
+                        this.loadingItems = true;
+                        const baseUrl = window.location.origin;
+                        const res = await fetch(`${baseUrl}/api/sales/item`);
+                        const data = await res.json();
+                        this.items = data;
+                    } catch (err) {
+                        console.error("Erro ao carregar artigos", err);
+                    } finally {
+                        this.loadingItems = false;
+                    }
+                },
                 addRow() {
                     this.rows.push({ sales_item_id: "", quantity: 1, unit_price: 0, sales_tax: 0, discount: 0 });
 

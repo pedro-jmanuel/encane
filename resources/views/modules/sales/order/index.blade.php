@@ -22,6 +22,7 @@
           <tr>
             <th>#</th>
             <th>Código</th>
+            <th>Têm Factura?</th>
             <th>Valor total</th>
             <th>Estado</th>
             <th>Data Vencimento</th>
@@ -33,7 +34,16 @@
             <tr>
                 <td>{{$loop->index + 1}}</td>
                 <td>{{$order->id}}</td>
+                <td>
+                  @if ($order->hasInvoice())
+                    <span class="badge rounded-pill bg-danger">Sim</span>
+                  @else
+                        <span class="badge rounded-pill bg-success">Não</span>
+                  @endif
+                </td>
                 <td class="text-end"> {{$order->total_amount}}</td>
+                 
+
                 <td>
                   {{-- TODO: Melhorar este forma de acesso, pode ser muito custoso --}}
                   <span

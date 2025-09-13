@@ -36,4 +36,9 @@ class Order extends Model
         return $this->hasOne(Invoice::class, 'sales_order_id');
     }
 
+    public function hasInvoice(): bool
+    {
+        return $this->invoice()->exists();
+    }
+
 }

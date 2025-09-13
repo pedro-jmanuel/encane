@@ -59,20 +59,22 @@
                     <a class="dropdown-item" href="{{route('sales.invoice.show',["invoice" => $invoice->id])}}"
                         ><i class="bx bx-receipt me-1"></i> Visualizar</a
                     >
-                    <a class="dropdown-item" href="{{route('sales.invoice.edit',["invoice" => $invoice->id])}}"
-                        ><i class="bx bx-edit-alt me-1"></i> Editar</a
-                    >
-                    <form action="{{ route('sales.invoice.destroy', $invoice->id) }}" 
-                          method="POST" 
-                          style="display:inline;"
-                          >
-                        @csrf
-                        @method('DELETE')
+                    {{--        
+                      <a class="dropdown-item" href="{{route('sales.invoice.edit',["invoice" => $invoice->id])}}"
+                          ><i class="bx bx-edit-alt me-1"></i> Editar</a
+                      >
+                      <form action="{{ route('sales.invoice.destroy', $invoice->id) }}" 
+                            method="POST" 
+                            style="display:inline;"
+                            >
+                          @csrf
+                          @method('DELETE')
 
-                        <button type="submit" class="dropdown-item">
-                            <i class="bx bx-trash me-1"></i> Eliminar
-                        </button>
-                    </form>
+                          <button type="submit" class="dropdown-item">
+                              <i class="bx bx-trash me-1"></i> Eliminar
+                          </button>
+                      </form>
+                    --}}
                     </div>
                 </div>
                 </td>

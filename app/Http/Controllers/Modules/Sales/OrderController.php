@@ -77,6 +77,18 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         //$request->dd();
+        if ($request->order_items == NULL) {
+            return redirect()->back()->withInput()->with("erro", "Um pedido deve ter pelomenos um(1) artigo");
+        }
+
+        $isAllItemDefined = true;
+        foreach ($request->order_items as $key => $order_item) {
+            if(empty($order_item['sales_item_id'])) $isAllItemDefined = false;
+        }
+
+        if (!$isAllItemDefined) {
+            return redirect()->back()->withInput()->with("erro", "Todas as linhas do pedido deve ter artigo definido");
+        }
 
         try {
 
@@ -92,8 +104,8 @@ class OrderController extends Controller
 
             $order['sales_customer_id'] = $customerCreated->id;
             $order['order_date']        = Carbon::now();
-            $order['due_date']          = $request->due_date;
-            $order['status']            = $request->status;
+            $order['due_date']          = $request->due_date ?? Carbon::now()->addDays(7) ;
+            $order['status']            = $request->status ?? 'DRAFT';
             $order['total_amount']      = 0;
 
             $orderCreated = Order::create($order);
@@ -164,6 +176,20 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
+
+        if ($request->order_items == NULL) {
+            return redirect()->back()->withInput()->with("erro", "Um pedido deve ter pelomenos um(1) artigo");
+        }
+
+        $isAllItemDefined = true;
+        foreach ($request->order_items as $key => $order_item) {
+            if(empty($order_item['sales_item_id'])) $isAllItemDefined = false;
+        }
+
+        if (!$isAllItemDefined) {
+            return redirect()->back()->withInput()->with("erro", "Todas as linhas do pedido deve ter artigo definido");
+        }
+
         try {
             DB::beginTransaction();
 
