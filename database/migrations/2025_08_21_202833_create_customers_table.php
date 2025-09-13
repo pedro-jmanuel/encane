@@ -15,8 +15,8 @@ return new class extends Migration
     {
         Schema::create('sales_customers', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
+            $table->string('name')->nullable();;
+            $table->string('email')->unique()->nullable();;
             $table->string('phone')->nullable();
             $table->string('address')->nullable();
             $table->string('tax_number')->nullable(); // NIF

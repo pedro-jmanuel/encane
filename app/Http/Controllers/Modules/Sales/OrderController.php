@@ -17,32 +17,32 @@ class OrderController extends Controller
 
     public $order_status = [
         [
-            'label' =>'Rascunho',
-            'value' =>'DRAFT',
-            'help'  =>'Pedido ainda não confirmado',
-            'span_class' =>'badge bg-secondary'
+            'label' => 'Rascunho',
+            'value' => 'DRAFT',
+            'help'  => 'Pedido ainda não confirmado',
+            'span_class' => 'badge bg-secondary'
         ],
         [
-            'label' =>'Pendente',
-            'value' =>'PENDING',
-            'help'  =>'Confirmado, aguardando emissão de fatura',
-            'span_class' =>'badge bg-warning'
+            'label' => 'Pendente',
+            'value' => 'PENDING',
+            'help'  => 'Confirmado, aguardando emissão de fatura',
+            'span_class' => 'badge bg-warning'
         ],
         [
-            'label' =>'Cancelado',
-            'value' =>'CANCELLED',
-            'help'  =>'Pedido anulado',
-            'span_class' =>'badge bg-danger'
+            'label' => 'Cancelado',
+            'value' => 'CANCELLED',
+            'help'  => 'Pedido anulado',
+            'span_class' => 'badge bg-danger'
         ],
         [
-            'label' =>'Completo',
-            'value' =>'COMPLETED',
-            'help'  =>'Pedido finalizado (entregue)',
-            'span_class' =>'badge bg-success'
+            'label' => 'Completo',
+            'value' => 'COMPLETED',
+            'help'  => 'Pedido finalizado (entregue)',
+            'span_class' => 'badge bg-success'
         ]
     ];
 
-  
+
     /**
      * Display a listing of the resource.
      *
@@ -52,7 +52,7 @@ class OrderController extends Controller
     {
         $data["orders"] = Order::paginate(10);
         $data["order_status"] = $this->order_status;
-        return view("modules.sales.order.index",$data);
+        return view("modules.sales.order.index", $data);
     }
 
     /**
@@ -64,8 +64,8 @@ class OrderController extends Controller
     {
         $data['items'] = Item::all();
         $data['order_status'] = new Collection($this->order_status);
-        
-        return view("modules.sales.order.create",$data);
+
+        return view("modules.sales.order.create", $data);
     }
 
     /**
@@ -76,12 +76,12 @@ class OrderController extends Controller
      */
     public function store(Request $request)
     {
-       //$request->dd();
-        
+        //$request->dd();
+
         try {
-            
+
             DB::beginTransaction();
-            
+
             $customer['name']       = $request->name;
             $customer['email']      = $request->email;
             $customer['phone']      = $request->phone;
@@ -101,7 +101,7 @@ class OrderController extends Controller
             $orderItems  = [];
             $total_amount = 0;
 
-            
+
             foreach ($request->order_items as $key => $order_item) {
                 $orderLine['sales_order_id'] = $orderCreated->id;
                 $orderLine['sales_item_id']    = $order_item['sales_item_id'];
@@ -111,17 +111,17 @@ class OrderController extends Controller
                 $orderLine['sales_tax']  = $order_item['sales_tax'];
                 $orderLine['created_at'] = Carbon::now();
                 $orderLine['updated_at'] = Carbon::now();
-                $total_amount += $orderLine['subtotal'] ;
-                array_push($orderItems,$orderLine);
+                $total_amount += $orderLine['subtotal'];
+                array_push($orderItems, $orderLine);
             }
             $orderCreated->total_amount = $total_amount;
             $orderCreated->save();
-            
+
             OrderItem::insert($orderItems);
-            DB::commit(); 
+            DB::commit();
             return redirect()->back()->with("sucesso", "Pedido salvo com sucesso ");
         } catch (\Exception $e) {
-            DB::rollBack(); 
+            DB::rollBack();
             throw $e;
             return redirect()->back()->with("erro", "Ocorreu algum erro ao salvar o pedido.");
         }
@@ -148,11 +148,11 @@ class OrderController extends Controller
     {
         $data['order'] = Order::find($id);
         $data['order_status'] = new Collection($this->order_status);
-        
+
         if ($data['order'] == NULL)
             return view('errors.404');
 
-        return view("modules.sales.order.edit",$data);
+        return view("modules.sales.order.edit", $data);
     }
 
     /**
@@ -164,7 +164,65 @@ class OrderController extends Controller
      */
     public function update(Request $request, $id)
     {
-        $request->dd();
+        try {
+            DB::beginTransaction();
+
+            // 1. Buscar a order
+            $order = Order::findOrFail($id);
+
+            // 2. Atualizar cliente (se necessário)
+            $customer = $order->customer;
+            $customer->update([
+                'name'       => $request->name,
+                'email'      => $request->email,
+                'phone'      => $request->phone,
+                'address'    => $request->address,
+                'tax_number' => $request->tax_number,
+            ]);
+
+            // 3. Atualizar dados do pedido
+            $order->update([
+                'due_date' => $request->due_date,
+                'status'   => $request->status,
+            ]);
+
+            // 4. Apagar itens antigos
+            $order->items()->delete();
+
+            // 5. Recriar itens
+            $orderItems = [];
+            $total_amount = 0;
+
+            foreach ($request->order_items as $order_item) {
+                $orderLine = [
+                    'sales_order_id' => $order->id,
+                    'sales_item_id'  => $order_item['sales_item_id'],
+                    'quantity'       => $order_item['quantity'],
+                    'unit_price'     => $order_item['unit_price'],
+                    'subtotal'       => $order_item['subtotal'],
+                    'sales_tax'      => $order_item['sales_tax'],
+                    'created_at'     => Carbon::now(),
+                    'updated_at'     => Carbon::now(),
+                ];
+
+                $total_amount += $orderLine['subtotal'];
+                $orderItems[] = $orderLine;
+            }
+
+            // 6. Inserir novamente os itens
+            OrderItem::insert($orderItems);
+
+            // 7. Atualizar o total do pedido
+            $order->total_amount = $total_amount;
+            $order->save();
+
+            DB::commit();
+            return redirect()->back()->with("sucesso", "Pedido atualizado com sucesso!");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+            return redirect()->back()->with("erro", "Ocorreu um erro ao atualizar o pedido.");
+        }
     }
 
     /**

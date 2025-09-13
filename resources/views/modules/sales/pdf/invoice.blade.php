@@ -55,9 +55,14 @@
 </head>
 
 <body>
+    {{$org_activa->nome}}
 
     <br>
-
+    <h6>Nome Cliente: {{ $invoice->order->customer->name }}</h6>
+    <h6>E-mail: {{ $invoice->order->customer->email }}</h6>
+    <h6>NIF: {{$invoice->order->customer->tax_number}}</h6>
+    <h6>Telefone: {{$invoice->order->customer->phone}}</h6>
+      
     <table class="tabela" style="width: 100%">
         <thead>
             <tr class="thead_tr_tabela" style="padding-top: 3px;">
@@ -65,30 +70,30 @@
                 <th style="width: 45%;">Artigo</th>
                 <th style="width: 5%;">Qtd</th>
                 <th style="width: 15%;">Preço Unit.</th> 
-                <th style="width: 15%;">Desconto</th>
+                <th style="width: 15%;">Valor Imp.</th>
+                <th style="width: 15%;">Imposto</th>
                 <th style="width: 15%;">Subtotal</th>
             </tr>
         </thead>
         <tbody>
 
             @foreach ($invoice->order->items as $orderItem)
-                @if (($loop->index + 1) % 2 == 0)
-                    <tr class="tr_tabela" style="background-color: gainsboro;">
-                @else
                     <tr class="tr_tabela">
-                @endif
                         <td class="td_tabela">{{ ($loop->index + 1) }}</td>
                         <td class="td_tabela">{{ $orderItem->item->name }} </td>
                         <td class="td_tabela">{{ $orderItem->quantity}} </td>
-                        <td class="td_tabela">{{ $orderItem->unit_price }}</td>
-                        <td class="td_tabela">{{ $orderItem->discount }}</td>
-                        <td class="td_tabela">{{ $orderItem->subtotal }}</td>
+                        <td class="td_tabela">{{ $orderItem->unit_price }}Kz</td>
+                        <td class="td_tabela">{{ ($orderItem->unit_price * $orderItem->quantity) * ($orderItem->sales_tax / 100) }}kz</td>
+                        <td class="td_tabela">{{ number_format($orderItem->sales_tax,0) }}%</td>
+                        <td class="td_tabela">{{ $orderItem->subtotal }}Kz</td>
                     </tr>
             @endforeach
         </tbody>
     </table>
-
-    <div> </div>
+       <br>
+       <br>
+       <br>
+    <div>Total a Pagar: {{ $invoice->order->total_amount }}Kz </div>
 </body>
 
 </html>

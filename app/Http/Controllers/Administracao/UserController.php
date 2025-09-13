@@ -106,15 +106,20 @@ class UserController extends Controller
             return back();
             //return back()->with(['sucesso' => 'A imagem foi atualizada com sucesso.']);
          }else{
-            $errorCode = $request->file('imagem')->getError();
+             if($request->hasFile('imagem')){
+                    $errorCode = $request->file('imagem')->getError();
 
-            if ($errorCode == UPLOAD_ERR_INI_SIZE) {
-                return back()->with(['erro' => 'A imagem é muito pesada.']);
-            } elseif ($errorCode == UPLOAD_ERR_NO_FILE) {
-                return back()->with(['erro' => 'Nenhum imagem foi enviada.']);
-            } else {
-                return back()->with(['erro' => 'Falha ao enviar a imagem.']);
-            }
+                    if ($errorCode == UPLOAD_ERR_INI_SIZE) {
+                        return back()->with(['erro' => 'A imagem é muito pesada.']);
+                    } elseif ($errorCode == UPLOAD_ERR_NO_FILE) {
+                        return back()->with(['erro' => 'Nenhum imagem foi enviada.']);
+                    } else {
+                        return back()->with(['erro' => 'Falha ao enviar a imagem.']);
+                    }
+             }else{
+                return back()->with(['erro' => 'Selecione uma imagem.']);
+             }
+         
         }
     }
 

@@ -5,7 +5,7 @@
     <div class="row">
         <form action="{{ route('sales.invoice.store') }}" method="POST" enctype="multipart/form-data">
             @csrf
-            <input type="hidden" name="sales_order_id" value="{{$order->id}}">
+            <input type="hidden" name="sales_order_id" value="{{ $order->id }}">
             <div class="col-lg-12 col-sm-12 col-12">
 
                 <div class="btn-group my-2" id="dropdown-icon-demo">
@@ -20,9 +20,9 @@
                         </li>
                     </ul>
                 </div>
-               
+
             </div>
-             
+
         </form>
     </div>
     <div class="row">
@@ -70,9 +70,9 @@
                         @if (session('erro'))
                             <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ session('erro') }}.</div>
                         @endif
-                        
+
                         @error('sales_order_id')
-                                <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ $message }}</div>
+                            <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ $message }}</div>
                         @enderror
 
                         <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
@@ -142,16 +142,17 @@
                             <div id="app">
                                 <h4 class="fw-bold py-3 mb-2">Linhas de pedido</h4>
 
-                               <div v-for="(row, index) in rows" :key="index" class="row mb-3">
+                                <div v-for="(row, index) in rows" :key="row.id ?? index" class="row mb-3">
                                     <!-- Artigo -->
-                                   <div class="col-md-3">
-                                    <label class="form-label">Artigo</label>
-                                    <select  :name="`order_items[${index}][sales_item_id]`" v-model="row.sales_item_id" class="form-select">
-                                        <option value="" disabled>Selecione</option>
-                                        <option v-for="item in items" :key="item.id" :value="item.id">
-                                        @{{ item.name }}
-                                        </option>
-                                    </select>
+                                    <div class="col-md-3">
+                                        <label class="form-label">Artigo</label>
+                                        <select :name="`order_items[${index}][sales_item_id]`" v-model="row.sales_item_id"
+                                            class="form-select">
+                                            <option value="" disabled>Selecione</option>
+                                            <option v-for="item in items" :key="item.id" :value="item.id">
+                                                @{{ item.name }}
+                                            </option>
+                                        </select>
                                     </div>
 
                                     <!-- Quantidade -->
@@ -182,14 +183,15 @@
                                             :name="`order_items[${index}][subtotal]`">
                                     </div>
 
-                                     <div class="mb-3 col-md-1">
-                                        <label class="form-label" >&nbsp; &nbsp;&nbsp; ⁮</label>
-                                        <button type="button" class="btn btn-icon btn-danger" v-on:click="removeRow(index)">
+                                    <div class="mb-3 col-md-1">
+                                        <label class="form-label">&nbsp; &nbsp;&nbsp; ⁮</label>
+                                        <button type="button" class="btn btn-icon btn-danger"
+                                            v-on:click="removeRow(index,row.id)">
                                             <span class="tf-icons bx bx-trash"></span>
                                         </button>
                                     </div>
 
-                                 
+
                                 </div>
 
                                 <!-- Botão para adicionar linhas -->
@@ -238,6 +240,48 @@
     <!-- Vue -->
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
     <script>
+        window.showToast = function(message, type = "success") {
+            // Cria o container se ainda não existir
+            let container = document.getElementById("toast-container");
+            if (!container) {
+                container = document.createElement("div");
+                container.id = "toast-container";
+                container.className = "toast-container position-fixed top-0 end-0 p-3";
+                 // 🔥 Garante que fica sempre por cima
+                container.style.zIndex = "2147483647"; 
+                container.style.pointerEvents = "none"; 
+                document.body.appendChild(container); 
+
+            }
+
+            // Monta o toast
+            const toast = document.createElement("div");
+            toast.className = `toast align-items-center bg-${type} border-0`;
+            toast.setAttribute("role", "alert");
+            toast.setAttribute("aria-live", "assertive");
+            toast.setAttribute("aria-atomic", "true");
+            toast.innerHTML = `
+            <div class="d-flex">
+                    <div class="toast-body">
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            // Inicializa e mostra
+            const bsToast = new bootstrap.Toast(toast, {
+                delay: 3000
+            });
+            bsToast.show();
+
+            // Remove depois de desaparecer
+            toast.addEventListener("hidden.bs.toast", () => toast.remove());
+        }
+    </script>
+    <script>
         const {
             createApp
         } = Vue;
@@ -248,6 +292,7 @@
                     order: {{ $order->id }},
                     items: [],
                     rows: [{
+                        id: 0,
                         sales_item_id: '',
                         quantity: 1,
                         unit_price: 0,
@@ -278,12 +323,50 @@
             },
             methods: {
                 addRow() {
-                    this.rows.push({ sales_item_id: "", quantity: 1, unit_price: 0, sales_tax: 0, discount: 0 });
+                    this.rows.push({
+                        id: undefined,
+                        sales_item_id: "",
+                        quantity: 1,
+                        unit_price: 0,
+                        sales_tax: 0,
+                        discount: 0
+                    });
 
                 },
-                removeRow(index) {
-                    this.rows.splice(index, 1);
+                removeRow(index, rowId) {
+                    if (!rowId) {
+                        // Caso a linha ainda não exista no banco, só remove do front
+                        this.rows.splice(index, 1);
+                        return;
+                    }
+                    const token = document.querySelector('input[name="_token"]').value;
+                    const baseUrl = window.location.origin;
+
+                    fetch(`${baseUrl}/api/sales/order-item/${rowId}`, {
+                            method: "DELETE",
+                            headers: {
+                                "Content-Type": "application/json",
+                                "X-CSRF-TOKEN": token,
+                            },
+                        })
+                        .then((response) => {
+                            if (!response.ok) {
+                                throw new Error("Erro ao remover a linha de pedido");
+                            }
+                            return response.json();
+                        })
+                        .then((data) => {
+                            // Se apagou no servidor, remove do array local
+                            this.rows.splice(index, 1);
+                            showToast("Linha de pedido removido com sucesso","success");
+                        })
+                        .catch((error) => {
+                            console.error(error);
+                            showToast("Falha ao remover a linha de pedido","danger");
+                        });
+
                 },
+
                 calcSubtotal(row) {
                     let item = this.items.find(i => i.id === row.sales_item_id);
                     if (item) {
@@ -296,11 +379,12 @@
                 },
             },
             computed: {
-                 totalGeral() {
+                totalGeral() {
                     return this.rows.reduce((acc, row) => acc + this.calcSubtotal(row), 0).toFixed(2);
-                 }
+                }
             }
         }).mount("#app");
     </script>
-    </script>
+
+
 @endsection
