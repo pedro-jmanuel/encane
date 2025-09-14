@@ -78,22 +78,21 @@
         <tbody>
 
             @foreach ($invoice->order->items as $orderItem)
-                    <tr class="tr_tabela">
-                        <td class="td_tabela">{{ ($loop->index + 1) }}</td>
+                <tr class="tr_tabela">
+                        <td class="td_tabela"  style="text-align: right;">{{ ($loop->index + 1) }}</td>
                         <td class="td_tabela">{{ $orderItem->item->name }} </td>
-                        <td class="td_tabela">{{ $orderItem->quantity}} </td>
-                        <td class="td_tabela">{{ $orderItem->unit_price }}Kz</td>
-                        <td class="td_tabela">{{ ($orderItem->unit_price * $orderItem->quantity) * ($orderItem->sales_tax / 100) }}kz</td>
-                        <td class="td_tabela">{{ number_format($orderItem->sales_tax,0) }}%</td>
-                        <td class="td_tabela">{{ $orderItem->subtotal }}Kz</td>
-                    </tr>
+                        <td class="td_tabela" style="text-align: right;">{{ $orderItem->quantity}} </td>
+                        <td class="td_tabela" style="text-align: right;">{{ number_format($orderItem->unit_price, 2, ',', '.') }}Kz</td>
+                        <td class="td_tabela" style="text-align: right;">{{ number_format(($orderItem->unit_price * $orderItem->quantity) * ($orderItem->sales_tax / 100), 2, ',', '.') }}kz</td>
+                        <td class="td_tabela" style="text-align: right;">{{ number_format($orderItem->sales_tax, 2, ',', '.')  }}%</td>
+                        <td class="td_tabela" style="text-align: right;">{{ number_format($orderItem->subtotal, 2, ',', '.') }}Kz</td>
+                </tr>
             @endforeach
         </tbody>
     </table>
        <br>
        <br>
-       <br>
-    <div>Total a Pagar: {{ $invoice->order->total_amount }}Kz </div>
+    <div>Total a Pagar: {{ number_format($invoice->order->total_amount, 2, ',', '.') }}Kz </div>
 </body>
 
 </html>

@@ -35,9 +35,9 @@
             <tr>
                 <td>{{$loop->index + 1}}</td>
                 <td>{{$invoice->id}}</td>
-                <td class="text-end"> {{$invoice->order->total_amount}}</td>
-                <td class="text-end"> {{$invoice->total_paid}}</td>
-                <td class="text-end"> {{$invoice->balance_due}}</td>
+                <td class="text-end"> {{number_format($invoice->order->total_amount, 2, ',', '.')}}</td>
+                <td class="text-end"> {{number_format($invoice->total_paid, 2, ',', '.')}}</td>
+                <td class="text-end"> {{number_format($invoice->balance_due, 2, ',', '.')}}</td>
                 <td>
                   {{-- TODO: Melhorar este forma de acesso, pode ser muito custoso --}}
                   <span

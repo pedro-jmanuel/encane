@@ -22,6 +22,10 @@
           <tr>
             <th>#</th>
             <th>Nome</th>
+            <th>Preço</th>
+            <th>Imposto Venda</th>
+            <th>Preço com Impos.</th>
+            <th>Tipo</th>
             <th>Opções</th>
           </tr>
         </thead>
@@ -30,6 +34,17 @@
             <tr>
                 <td>{{$loop->index + 1}}</td>
                 <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{$item->name}}</td>
+                <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{ number_format($item->price, 2, ',', '.')}}</td>
+                <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{number_format($item->sales_tax, 2, ',', '.') }}%</td>
+                <td><i class="fab fa-angular fa-lg text-danger me-3"></i> {{number_format(($item->price + ($item->price * ($item->sales_tax / 100))), 2, ',', '.') }}</td>
+                <td><i class="fab fa-angular fa-lg text-danger me-3"></i> 
+                  @if ($item->item_type=='PRODUCT')
+                      Produto
+                  @endif
+                  @if ($item->item_type=='SERVICE')
+                      Serviço
+                  @endif
+                </td>
                 <td>
                 <div class="dropdown">
                     <button type="button" class="btn p-0 dropdown-toggle hide-arrow" data-bs-toggle="dropdown">

@@ -41,7 +41,7 @@
                         <span class="badge rounded-pill bg-success">Não</span>
                   @endif
                 </td>
-                <td class="text-end"> {{$order->total_amount}}</td>
+                <td class="text-end"> {{number_format($order->total_amount, 2, ',', '.') }}</td>
                  
 
                 <td>
