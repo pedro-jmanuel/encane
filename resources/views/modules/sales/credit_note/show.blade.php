@@ -1,6 +1,6 @@
 @extends('administracao.master')
 @section('content')
-    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Factura /</span> Visualizar</h4>
+    <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Factura /</span> Visualizar Nota de Crédito</h4>
 
 
     <div class="row">
@@ -25,9 +25,13 @@
 
     </div>
     <div class="row">
-         <h2 class="mb-2">Factura #{{$invoice->id}} </h2>
+         <h2 class="mb-2">Nota de Crédito, Factura #{{$invoice->id}}</h2>
          <div class="row g-2">
-              <embed src="{{route('sales.pdf.invoice',$invoice->id)}}" height="800px" type="application/pdf">
+            @if ($invoice->hasCreditNote())
+                <embed src="{{route('sales.pdf.credit_note',$invoice->id)}}" height="800px" type="application/pdf"> 
+            @else
+                <div class="alert alert-primary" role="alert">Não foi emitido nota de crédito para esta factura</div>
+            @endif
           </div>
 
     </div>

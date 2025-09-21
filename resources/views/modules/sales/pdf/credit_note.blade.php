@@ -57,13 +57,16 @@
 <body>
     {{$org_activa->nome}}
 
-    <h1>Factura</h1>
+    <h1>Nota de Crédito</h1>
     <br>
-    <h6>Nome Cliente: {{ $invoice->order->customer->name }}</h6>
-    <h6>E-mail: {{ $invoice->order->customer->email }}</h6>
-    <h6>NIF: {{$invoice->order->customer->tax_number}}</h6>
-    <h6>Telefone: {{$invoice->order->customer->phone}}</h6>
-      
+    {{--
+        <h6>Nome Cliente: {{ $invoice->order->customer->name }}</h6>
+        <h6>E-mail: {{ $invoice->order->customer->email }}</h6>
+        <h6>NIF: {{$invoice->order->customer->tax_number}}</h6>
+        <h6>Telefone: {{$invoice->order->customer->phone}}</h6>
+
+    --}}
+
     <table class="tabela" style="width: 100%">
         <thead>
             <tr class="thead_tr_tabela" style="padding-top: 3px;">
@@ -78,22 +81,22 @@
         </thead>
         <tbody>
 
-            @foreach ($invoice->order->items as $orderItem)
+            @foreach ($credit_note->creditNoteItems as $creditNoteItem)
                 <tr class="tr_tabela">
                         <td class="td_tabela"  style="text-align: right;">{{ ($loop->index + 1) }}</td>
-                        <td class="td_tabela">{{ $orderItem->item->name }} </td>
-                        <td class="td_tabela" style="text-align: right;">{{ $orderItem->quantity}} </td>
-                        <td class="td_tabela" style="text-align: right;">{{ number_format($orderItem->unit_price, 2, ',', '.') }}Kz</td>
-                        <td class="td_tabela" style="text-align: right;">{{ number_format(($orderItem->unit_price * $orderItem->quantity) * ($orderItem->sales_tax / 100), 2, ',', '.') }}kz</td>
-                        <td class="td_tabela" style="text-align: right;">{{ number_format($orderItem->sales_tax, 2, ',', '.')  }}%</td>
-                        <td class="td_tabela" style="text-align: right;">{{ number_format($orderItem->subtotal, 2, ',', '.') }}Kz</td>
+                        <td class="td_tabela">{{ $creditNoteItem->item->name }} </td>
+                        <td class="td_tabela" style="text-align: right;">{{ $creditNoteItem->quantity}} </td>
+                        <td class="td_tabela" style="text-align: right;">{{ number_format($creditNoteItem->unit_price, 2, ',', '.') }}Kz</td>
+                        <td class="td_tabela" style="text-align: right;">{{ number_format(($creditNoteItem->unit_price * $creditNoteItem->quantity) * ($creditNoteItem->sales_tax / 100), 2, ',', '.') }}kz</td>
+                        <td class="td_tabela" style="text-align: right;">{{ number_format($creditNoteItem->sales_tax, 2, ',', '.')  }}%</td>
+                        <td class="td_tabela" style="text-align: right;">{{ number_format($creditNoteItem->subtotal, 2, ',', '.') }}Kz</td>
                 </tr>
             @endforeach
         </tbody>
     </table>
        <br>
        <br>
-    <div>Total a Pagar: {{ number_format($invoice->order->total_amount, 2, ',', '.') }}Kz </div>
+    <div>Total a Pagar: {{ number_format($credit_note->total_amount, 2, ',', '.') }}Kz </div>
 </body>
 
 </html>

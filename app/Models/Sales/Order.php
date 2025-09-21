@@ -41,4 +41,34 @@ class Order extends Model
         return $this->invoice()->exists();
     }
 
+    public static function status(){
+        return  [
+        [
+            'label' => 'Rascunho',
+            'value' => 'DRAFT',
+            'help'  => 'Pedido ainda não confirmado',
+            'span_class' => 'badge bg-secondary'
+        ],
+        [
+            'label' => 'Pendente',
+            'value' => 'PENDING',
+            'help'  => 'Confirmado, aguardando emissão de fatura',
+            'span_class' => 'badge bg-warning'
+        ],
+        [
+            'label' => 'Cancelado',
+            'value' => 'CANCELLED',
+            'help'  => 'Pedido anulado',
+            'span_class' => 'badge bg-danger'
+        ],
+        [
+            'label' => 'Completo',
+            'value' => 'COMPLETED',
+            'help'  => 'Pedido finalizado (entregue)',
+            'span_class' => 'badge bg-success'
+        ]
+    ];
+
+    }
+
 }

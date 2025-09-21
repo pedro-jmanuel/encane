@@ -46,7 +46,7 @@
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="name">Nome</label>
-                                    <input value="{{old('name')}}" name="name" type="text"
+                                    <input value="{{ old('name') }}" name="name" type="text"
                                         class="form-control @error('name') is-invalid @enderror" id="name"
                                         placeholder="" />
                                     @error('name')
@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="phone">Telefone</label>
-                                    <input value="{{old('phone')}}" name="phone" type="text"
+                                    <input value="{{ old('phone') }}" name="phone" type="text"
                                         class="form-control @error('phone') is-invalid @enderror" id="phone"
                                         placeholder="" />
                                     @error('phone')
@@ -64,7 +64,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="tax_number">NIF</label>
-                                    <input value="{{old('tax_number')}}" name="tax_number" type="text"
+                                    <input value="{{ old('tax_number') }}" name="tax_number" type="text"
                                         class="form-control @error('tax_number') is-invalid @enderror" id="tax_number"
                                         placeholder="" />
                                     @error('tax_number')
@@ -73,7 +73,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="tax_number">Email</label>
-                                    <input value="{{old('email')}}" name="email" type="text"
+                                    <input value="{{ old('email') }}" name="email" type="text"
                                         class="form-control @error('email') is-invalid @enderror" id="email"
                                         placeholder="" />
                                     @error('email')
@@ -82,7 +82,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="address">Endereço</label>
-                                    <input value="{{old('address')}}" name="address" type="text"
+                                    <input value="{{ old('address') }}" name="address" type="text"
                                         class="form-control @error('address') is-invalid @enderror" id="address"
                                         placeholder="" />
                                     @error('address')
@@ -97,9 +97,9 @@
                             <div class="row">
                                 <div class="mb-3 col-md-4">
                                     <label class="form-label" for="quantity">Data de Vencimento</label>
-                                    <input value="{{old('due_date')}}" name="due_date" type="datetime-local" min="1"
-                                        class="form-control @error('due_date') is-invalid @enderror" id="due_date"
-                                        placeholder="" />
+                                    <input value="{{ old('due_date') }}" name="due_date" type="datetime-local"
+                                        min="1" class="form-control @error('due_date') is-invalid @enderror"
+                                        id="due_date" placeholder="" />
                                     @error('due_date')
                                         <small class="text-danger">{{ $message }}</small>
                                     @enderror
@@ -107,58 +107,79 @@
                             </div>
                             <div id="app">
                                 <h4 class="fw-bold py-3 mb-2">Linhas de pedido</h4>
+                                <div class="table-responsive text-nowrap">
+                                    <table class="table table-sm align-middle table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th style="width: 50%;min-width: 20%;">Artigo</th>
+                                                <th>Qtd</th>
+                                                <th >Preço (Kz)</th>
+                                                <th >Imp. (%)</th>
+                                                <th >Subtotal (Kz)</th>
+                                                <th ></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(row, index) in rows" :key="index">
 
-                                <div v-for="(row, index) in rows" :key="index" class="row mb-3">
-                                    <!-- Artigo -->
-                                   <div class="mb-3 col-md-3">
-                                    <label class="form-label">Artigo</label>
-                                    <select  :name="`order_items[${index}][sales_item_id]`" v-model="row.sales_item_id" class="form-select">
-                                        <option value="" disabled> @{{ loadingItems ? "Carregando artigos..." : "Selecione" }}</option>
-                                        <option v-for="item in items" :key="item.id" :value="item.id">
-                                        @{{ item.name }}
-                                        </option>
-                                    </select>
-                                    </div>
+                                                <!-- Artigo -->
+                                                <td>
+                                                    <select :name="`order_items[${index}][sales_item_id]`"
+                                                        v-model="row.sales_item_id" class="form-select form-select-sm">
+                                                        <option value="" disabled>
+                                                            @{{ loadingItems ? "Carregando..." : "Selecione" }}
+                                                        </option>
+                                                        <option v-for="item in items" :key="item.id"
+                                                            :value="item.id">
+                                                            @{{ item.name }}
+                                                        </option>
+                                                    </select>
+                                                </td>
 
-                                    <!-- Quantidade -->
-                                    <div class="mb-3 col-md-2">
-                                        <label class="form-label">Quantidade</label>
-                                        <input type="number" min="1" class="form-control"
-                                            v-model.number="row.quantity" :name="`order_items[${index}][quantity]`">
-                                    </div>
+                                                <!-- Quantidade -->
+                                                <td>
+                                                    <input type="number" min="1"
+                                                        class="form-control form-control-sm text-end"
+                                                        v-model.number="row.quantity"
+                                                        :name="`order_items[${index}][quantity]`">
+                                                </td>
 
-                                    <!-- Preço Unitário (readonly) -->
-                                    <div class="mb-3 col-md-2">
-                                        <label class="form-label">Preço Unitário <small>(Kz)</small></label>
-                                        <input type="number" class="form-control" readonly
-                                            v-model.number="row.unit_price" :name="`order_items[${index}][unit_price]`">
-                                    </div>
+                                                <!-- Preço Unitário -->
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm text-end"
+                                                        v-model.number="row.unit_price"
+                                                        :name="`order_items[${index}][unit_price]`" readonly>
+                                                </td>
 
-                                    <!-- Imposto -->
-                                    <div class="mb-3 col-md-2">
-                                        <label class="form-label">Imposto Venda (%)</label>
-                                        <input type="number" min="0" class="form-control" readonly
-                                            v-model.number="row.sales_tax" :name="`order_items[${index}][sales_tax]`">
-                                    </div>
+                                                <!-- Imposto -->
+                                                <td>
+                                                    <input type="number" min="0"
+                                                        class="form-control form-control-sm text-end"
+                                                        v-model.number="row.sales_tax"
+                                                        :name="`order_items[${index}][sales_tax]`" readonly>
+                                                </td>
 
-                                    <!-- Subtotal -->
-                                    <div class="mb-3 col-md-2">
-                                        <label class="form-label">Subtotal <small>(Kz)</small></label>
-                                        <input type="number" class="form-control" readonly :value="calcSubtotal(row)"
-                                            :name="`order_items[${index}][subtotal]`">
-                                    </div>
+                                                <!-- Subtotal -->
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm text-end"
+                                                        :value="calcSubtotal(row)" :name="`order_items[${index}][subtotal]`"
+                                                        readonly>
+                                                </td>
 
-                                     <div class="mb-3 col-md-1">
-                                        <label class="form-label" >&nbsp; &nbsp;&nbsp; ⁮</label>
-                                        <button type="button" class="btn btn-icon btn-danger" v-on:click="removeRow(index)">
-                                            <span class="tf-icons bx bx-trash"></span>
-                                        </button>
-                                    </div>
-                                    <div class="divider divider-primary">
-                                        <div class="divider-text"></div>
-                                    </div>
-                                 
+                                                <!-- Remover -->
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                        v-on:click="removeRow(index)">
+                                                        <i class="bx bx-trash"></i>
+                                                    </button>
+                                                </td>
+
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
+
+
 
                                 <!-- Botão para adicionar linhas -->
                                 <button type="button" class="btn btn-primary" v-on:click="addRow">
@@ -180,10 +201,8 @@
                                         <option value="" selected disabled>Selecione</option>
                                         @foreach ($order_status as $status)
                                             <option value="{{ $status['value'] }}"
-                                                @if (old('status')==$status['value'])
-                                                    selected
-                                                @endif
-                                            >{{ $status['label'] }}</option>
+                                                @if (old('status') == $status['value']) selected @endif>{{ $status['label'] }}
+                                            </option>
                                         @endforeach
 
                                     </select>
@@ -227,11 +246,11 @@
                 };
             },
             mounted() {
-               this.fetchItems();
+                this.fetchItems();
             },
             methods: {
-                async fetchItems(){
-                   try {
+                async fetchItems() {
+                    try {
                         this.loadingItems = true;
                         const baseUrl = window.location.origin;
                         const res = await fetch(`${baseUrl}/api/sales/item`);
@@ -244,7 +263,13 @@
                     }
                 },
                 addRow() {
-                    this.rows.push({ sales_item_id: "", quantity: 1, unit_price: 0, sales_tax: 0, discount: 0 });
+                    this.rows.push({
+                        sales_item_id: "",
+                        quantity: 1,
+                        unit_price: 0,
+                        sales_tax: 0,
+                        discount: 0
+                    });
 
                 },
                 removeRow(index) {
@@ -262,9 +287,9 @@
                 },
             },
             computed: {
-                 totalGeral() {
+                totalGeral() {
                     return this.rows.reduce((acc, row) => acc + this.calcSubtotal(row), 0).toFixed(2);
-                 }
+                }
             }
         }).mount("#app");
     </script>

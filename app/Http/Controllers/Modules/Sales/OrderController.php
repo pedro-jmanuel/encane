@@ -14,7 +14,7 @@ use Illuminate\Support\Facades\DB;
 
 class OrderController extends Controller
 {
-
+    // TODO: Remover daqui pois já está estaticamente na model Order
     public $order_status = [
         [
             'label' => 'Rascunho',

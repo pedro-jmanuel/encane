@@ -31,4 +31,14 @@ class Invoice extends Model
     {
         return $this->hasMany(Payment::class, 'invoice_id');
     }
+
+    public function creditNotes()
+    {
+        return $this->hasMany(CreditNote::class, 'sales_invoice_id');
+    }
+
+    public function hasCreditNote(): bool
+    {
+        return $this->creditNotes()->exists();
+    }
 }

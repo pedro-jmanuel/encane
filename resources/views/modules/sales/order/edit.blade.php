@@ -28,7 +28,7 @@
     <div class="row">
         <form action="{{ route('sales.order.update', ['order' => $order->id]) }}" method="POST"
             enctype="multipart/form-data">
-            
+
             @csrf
             @method('PUT')
             <div class="col-xl-12 col-xl-12">
@@ -57,8 +57,8 @@
                             </button>
                         </li>
                     </ul>
-                    
-                   
+
+
                     <div class="tab-content">
                         @if (session('sucesso'))
                             <div class="alert alert-success"><i class="bi bi-check-circle"></i> {{ session('sucesso') }}.
@@ -70,7 +70,8 @@
                         @endif
 
                         @if ($order->hasInvoice())
-                            <div class="alert alert-warning"><i class="bi bi-check-circle"></i> Este pedido já não pode ser alterado pois já foi criado uma factura.</div>
+                            <div class="alert alert-warning"><i class="bi bi-check-circle"></i> Este pedido já não pode ser
+                                alterado pois já foi criado uma factura.</div>
                         @endif
 
                         @error('sales_order_id')
@@ -79,8 +80,8 @@
                         <div class="tab-pane fade show active" id="navs-pills-justified-home" role="tabpanel">
                             @if ($order->hasInvoice())
                                 <fieldset disabled>
-                            @else
-                                <fieldset>
+                                @else
+                                    <fieldset>
                             @endif
                             <div class="row">
                                 <div class="mb-3 col-md-6">
@@ -135,8 +136,8 @@
 
                             @if ($order->hasInvoice())
                                 <fieldset disabled>
-                            @else
-                                <fieldset>
+                                @else
+                                    <fieldset>
                             @endif
                             <div class="row">
                                 <div class="mb-3 col-md-4">
@@ -153,58 +154,76 @@
                             <div id="app">
                                 <h4 class="fw-bold py-3 mb-2">Linhas de pedido</h4>
                                 <span class="text-primary">@{{ loadingOrders ? "Carregando linhas do pedido..." : "" }}</span>
-                                <div v-for="(row, index) in rows" :key="row.id ?? index" class="row mb-3">
-                                    <!-- Artigo -->
-                                    <div class="mb-3 col-md-3 ">
-                                        <label class="form-label">Artigo</label>
-                                        <select :name="`order_items[${index}][sales_item_id]`" v-model="row.sales_item_id"
-                                            class="form-select">
-                                            <option value="" disabled>  @{{ loadingItems ? "Carregando artigos..." : "Selecione" }}</option>
-                                            <option v-for="item in items" :key="item.id" :value="item.id">
-                                                @{{ item.name }}
-                                            </option>
-                                        </select>
-                                    </div>
+                                <div class="table-responsive">
+                                    <table class="table table-sm  align-middle table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>Artigo</th>
+                                                <th>Qtd</th>
+                                                <th>Preço (Kz)</th>
+                                                <th>Imp. (%)</th>
+                                                <th>Subtotal (Kz)</th>
+                                                <th>Ações</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(row, index) in rows" :key="row.id ?? index">
+                                                <!-- Artigo -->
+                                                <td>
+                                                    <select class="form-select form-select-sm" v-model="row.sales_item_id"
+                                                        :name="`order_items[${index}][sales_item_id]`">
+                                                        <option value="" disabled>
+                                                            @{{ loadingItems ? "Carregando..." : "Selecione" }}
+                                                        </option>
+                                                        <option v-for="item in items" :key="item.id"
+                                                            :value="item.id">
+                                                            @{{ item.name }}
+                                                        </option>
+                                                    </select>
+                                                </td>
 
-                                    <!-- Quantidade -->
-                                    <div class="mb-3 col-md-2">
-                                        <label class="form-label">Quantidade</label>
-                                        <input type="number" min="1" class="form-control"
-                                            v-model.number="row.quantity" :name="`order_items[${index}][quantity]`">
-                                    </div>
+                                                <!-- Quantidade -->
+                                                <td>
+                                                    <input type="number" min="1"
+                                                        class="form-control form-control-sm" v-model.number="row.quantity"
+                                                        :name="`order_items[${index}][quantity]`">
+                                                </td>
 
-                                    <!-- Preço Unitário (readonly) -->
-                                    <div class="mb-3 col-md-2">
-                                        <label class="form-label">Preço Unitário <small>(Kz)</small></label>
-                                        <input type="number" class="form-control" readonly
-                                            v-model.number="row.unit_price" :name="`order_items[${index}][unit_price]`">
-                                    </div>
+                                                <!-- Preço Unitário -->
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" readonly
+                                                        v-model.number="row.unit_price"
+                                                        :name="`order_items[${index}][unit_price]`">
+                                                </td>
 
-                                    <!-- Imposto -->
-                                    <div class="mb-3 col-md-2 ">
-                                        <label class="form-label">Imposto Venda (%)</label>
-                                        <input type="number" min="0" class="form-control" readonly
-                                            v-model.number="row.sales_tax" :name="`order_items[${index}][sales_tax]`">
-                                    </div>
+                                                <!-- Imposto -->
+                                                <td>
+                                                    <input type="number" min="0"
+                                                        class="form-control form-control-sm" readonly
+                                                        v-model.number="row.sales_tax"
+                                                        :name="`order_items[${index}][sales_tax]`">
+                                                </td>
 
-                                    <!-- Subtotal -->
-                                    <div class="mb-3 col-md-2 ">
-                                        <label class="form-label">Subtotal <small>(Kz)</small></label>
-                                        <input type="number" class="form-control" readonly :value="calcSubtotal(row)"
-                                            :name="`order_items[${index}][subtotal]`">
-                                    </div>
+                                                <!-- Subtotal -->
+                                                <td>
+                                                    <input type="number" class="form-control form-control-sm" readonly
+                                                        :value="calcSubtotal(row)"
+                                                        :name="`order_items[${index}][subtotal]`">
+                                                </td>
 
-                                    <div class="mb-3 col-md-1">
-                                        <label class="form-label">&nbsp; &nbsp;&nbsp; ⁮</label>
-                                        <button type="button" class="btn btn-icon btn-danger"
-                                            v-on:click="removeRow(index,row.id)">
-                                            <span class="tf-icons bx bx-trash"></span>
-                                        </button>
-                                    </div>
-                                    <div class="divider divider-primary">
-                                        <div class="divider-text"></div>
-                                    </div>
+                                                <!-- Remover -->
+                                                <td class="text-center">
+                                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                                        v-on:click="removeRow(index, row.id)">
+                                                        <i class="bx bx-trash"></i>
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
+
+
 
                                 <!-- Botão para adicionar linhas -->
                                 <button type="button" class="btn btn-primary" v-on:click="addRow">
@@ -221,8 +240,8 @@
                         <div class="tab-pane fade" id="navs-pills-justified-messages" role="tabpanel">
                             @if ($order->hasInvoice())
                                 <fieldset disabled>
-                            @else
-                                <fieldset>
+                                @else
+                                    <fieldset>
                             @endif
                             <div class="row">
                                 <div class="mb-3 col-md-4">
@@ -246,11 +265,11 @@
                             </div>
                             </fieldset>
                         </div>
-                       
+
                     </div>
                 </div>
             </div>
-            
+
         </form>
     </div>
 
@@ -264,10 +283,10 @@
                 container = document.createElement("div");
                 container.id = "toast-container";
                 container.className = "toast-container position-fixed top-0 end-0 p-3";
-                 // 🔥 Garante que fica sempre por cima
-                container.style.zIndex = "2147483647"; 
-                container.style.pointerEvents = "none"; 
-                document.body.appendChild(container); 
+                // 🔥 Garante que fica sempre por cima
+                container.style.zIndex = "2147483647";
+                container.style.pointerEvents = "none";
+                document.body.appendChild(container);
 
             }
 
@@ -325,8 +344,8 @@
                 this.fetchOrders();
             },
             methods: {
-                async fetchItems(){
-                   try {
+                async fetchItems() {
+                    try {
                         this.loadingItems = true;
                         const baseUrl = window.location.origin;
                         const res = await fetch(`${baseUrl}/api/sales/item`);
@@ -338,8 +357,8 @@
                         this.loadingItems = false;
                     }
                 },
-                async fetchOrders(){
-                   try {
+                async fetchOrders() {
+                    try {
                         this.loadingOrders = true;
                         const baseUrl = window.location.origin;
                         const res = await fetch(`${baseUrl}/api/sales/order/${this.order}/items`);
@@ -364,9 +383,9 @@
 
                 },
                 removeRow(index, rowId) {
-                        
+
                     this.rows.splice(index, 1);
-                    return;        
+                    return;
                 },
 
                 calcSubtotal(row) {
@@ -387,6 +406,4 @@
             }
         }).mount("#app");
     </script>
-
-
 @endsection

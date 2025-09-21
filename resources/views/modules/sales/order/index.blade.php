@@ -36,9 +36,9 @@
                 <td>{{$order->id}}</td>
                 <td>
                   @if ($order->hasInvoice())
-                    <span class="badge rounded-pill bg-danger">Sim</span>
+                    <span class="badge rounded-pill bg-success ">Sim</span>
                   @else
-                        <span class="badge rounded-pill bg-success">Não</span>
+                        <span class="badge rounded-pill bg-danger">Não</span>
                   @endif
                 </td>
                 <td class="text-end"> {{number_format($order->total_amount, 2, ',', '.') }}</td>

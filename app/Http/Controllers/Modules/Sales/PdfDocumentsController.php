@@ -24,5 +24,21 @@ class PdfDocumentsController extends Controller
 
         return $pdf->stream("FACT_".$data['invoice']->id);
     }
+    
+
+    public function credit_note_pdf($invoice)
+    {
+        $data['invoice'] = Invoice::find($invoice);
+
+        $data['credit_note'] = $data['invoice']->creditNotes->first(); // TODO: Será que uma factura pode ter mais de uma nota de credito??
+
+
+        if ($data['invoice'] == NULL)
+            return view('errors.404');
+
+        $pdf = Pdf::loadView('modules.sales.pdf.credit_note', $data);
+
+        return $pdf->stream("CRED_NOTE_".$data['invoice']->id);
+    }
 
 }
