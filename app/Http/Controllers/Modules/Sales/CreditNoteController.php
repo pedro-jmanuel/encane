@@ -37,6 +37,10 @@ class CreditNoteController extends Controller
         if ($data['order'] == NULL)
             return view('errors.404');
 
+        if($data['order']->invoice->payment_status <> 'PAID'){
+            return redirect()->back()->with("erro","Não pode emitir uma nota de crédito em uma factura não paga pago.");
+        }
+
         return view("modules.sales.credit_note.create", $data);
     }
 

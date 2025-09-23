@@ -16,7 +16,7 @@ class Item extends Model
     protected $fillable = [
         "name",
         "description",
-        "price", // TODO:  Adicionar coluna preço de compra/custo
+        "price", 
         "cost",
         "purchase_tax",
         "sales_tax",
