@@ -30,7 +30,15 @@
             @if ($invoice->hasCreditNote())
                 <embed src="{{route('sales.pdf.credit_note',$invoice->id)}}" height="800px" type="application/pdf"> 
             @else
-                <div class="alert alert-primary" role="alert">Não foi emitido nota de crédito para esta factura</div>
+                <div class="alert alert-danger" role="alert">Não foi emitido nota de crédito para esta factura.</div>
+            @endif
+
+            @if (session('sucesso'))
+                <div class="alert alert-success"><i class="bi bi-check-circle"></i> {{ session('sucesso') }}</div>
+            @endif
+
+            @if (session('erro'))
+                <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ session('erro') }}</div>
             @endif
           </div>
 

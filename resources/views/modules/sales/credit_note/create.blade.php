@@ -36,10 +36,10 @@
             @endif
 
             @if (session('erro'))
-                <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ session('erro') }}.
-                    </div>
-                @endif
-            <div class="alert alert-primary" role="alert">Já existe uma nota de crédito para esta factura.</div>
+                <div class="alert alert-danger"><i class="bi bi-check-circle"></i> {{ session('erro') }}
+                </div>
+            @endif
+            <div class="alert alert-danger" role="alert">Já existe uma nota de crédito para esta factura.</div>
         @else
             <form action="{{ route('sales.credit_note.store', ['order' => $order->id, 'invoice' => $order->invoice->id]) }}"
                 method="POST" enctype="multipart/form-data">
