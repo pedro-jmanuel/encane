@@ -24,8 +24,8 @@ class StoreItemRequest extends FormRequest
             'item_type'  => 'required|max:255',
             'category_id'=> 'required|max:255',
             'description' => '',
-            'sales_tax'=> '',
-            'purchase_tax'=> '',
+            'sales_tax_id'=> 'required',
+            'purchase_tax_id'=> 'required',
             'cost'=>''
         ];
     }
@@ -38,8 +38,8 @@ class StoreItemRequest extends FormRequest
             'item_type.required' => 'O tipo é obrigatório',
             'category_id.required'=> 'A categoria é obrigatorio',
             'description' => '',
-            'sales_tax'=> '',
-            'purchase_tax'=> '',
+            'sales_tax_id'=> 'O imposto de venda é obrigatorio',
+            'purchase_tax_id'=> 'O imposto de compra é obrigatorio',
             'cost'=>''
         ];
     }

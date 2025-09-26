@@ -77,6 +77,7 @@ Route::group(['middleware' => ['auth']], function () {
     Route::get('sales/pdf/credit_note/{invoice}', [App\Http\Controllers\Modules\Sales\PdfDocumentsController::class, 'credit_note_pdf'])->name('sales.pdf.credit_note');
     Route::resource('sales/credit-note', App\Http\Controllers\Modules\Sales\CreditNoteController::class)->names('sales.credit_note');
     Route::resource('sales/payment', App\Http\Controllers\Modules\Sales\PaymentController::class)->names('sales.payment');
+    Route::get('sales/saft/generate', [App\Http\Controllers\Modules\Sales\SaftController::class,'generate'])->name('sales.saft.generate');
 
 
     // Routas Organizacao

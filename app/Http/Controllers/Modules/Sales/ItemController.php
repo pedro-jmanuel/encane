@@ -7,7 +7,9 @@ use App\Http\Requests\Modules\Sales\Item\StoreItemRequest;
 use App\Http\Requests\Modules\Sales\Item\UpdateItemRequest;
 use App\Models\Sales\Category;
 use App\Models\Sales\Item;
+use App\Models\Sales\Tax;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ItemController extends Controller
 {
@@ -32,6 +34,7 @@ class ItemController extends Controller
     public function create()
     {
         $data["categories"] = Category::all();
+        $data["taxes"] = Tax::all();
         return view("modules.sales.item.create",$data);
     }
 
@@ -41,11 +44,37 @@ class ItemController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    //public function store(StoreItemRequest $request)
     public function store(StoreItemRequest $request)
     {
-        $data = $request->except("_token");
-        Item::create($data);
-        return redirect()->back()->with("sucesso", "Artigo salvo com sucesso ");
+        try {
+            DB::beginTransaction();
+            $data = $request->except("_token");
+            $item = Item::create($data);
+
+            $purchase_tax = Tax::find($request->purchase_tax_id);
+            $sales_tax    = Tax::find($request->sales_tax_id);
+
+            $item->purchase_tax_amount = $purchase_tax->amount;
+            $item->purchase_tax_type   = $purchase_tax->type;
+            $item->purchase_tax_code   = $purchase_tax->code;
+            $item->purchase_tax        = $purchase_tax->percentage;
+
+            $item->sales_tax_amount = $sales_tax->amount;
+            $item->sales_tax_type   = $sales_tax->type;
+            $item->sales_tax_code   = $sales_tax->code;
+            $item->sales_tax        = $sales_tax->percentage;
+            $item->save();
+
+            DB::commit();
+            return redirect()->back()->with("sucesso", "Artigo salvo com sucesso ");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+            return redirect()->back()->with("erro", "Ocorreu algum erro ao salvar o artigo.");
+        }
+
+       
     }
 
     /**
@@ -69,6 +98,7 @@ class ItemController extends Controller
     {
         $data['item'] = Item::find($id);
         $data["categories"] = Category::all();
+        $data["taxes"] = Tax::all();
 
         if ($data['item'] == NULL)
             return view('errors.404');
@@ -86,10 +116,36 @@ class ItemController extends Controller
     public function update(UpdateItemRequest $request, $id)
     {
         $data = $request->except("_token");
-        $item  = Item::find($id);
 
-        $item->update($data);
-        return redirect()->back()->with("sucesso", "Artigo atualizado com sucesso ");
+         try {
+            DB::beginTransaction();
+            $item  = Item::find($id);
+
+            $item->update($data);
+
+            $purchase_tax = Tax::find($request->purchase_tax_id);
+            $sales_tax    = Tax::find($request->sales_tax_id);
+
+            $item->purchase_tax_amount = $purchase_tax->amount;
+            $item->purchase_tax_type   = $purchase_tax->type;
+            $item->purchase_tax_code   = $purchase_tax->code;
+            $item->purchase_tax        = $purchase_tax->percentage;
+
+            $item->sales_tax_amount = $sales_tax->amount;
+            $item->sales_tax_type   = $sales_tax->type;
+            $item->sales_tax_code   = $sales_tax->code;
+            $item->sales_tax        = $sales_tax->percentage;
+            $item->save();
+
+          DB::commit();
+            return redirect()->back()->with("sucesso", "Artigo atualizado com sucesso ");
+        } catch (\Exception $e) {
+            DB::rollBack();
+            throw $e;
+            return redirect()->back()->with("erro", "Ocorreu algum erro ao atualizar o artigo.");
+        }
+
+        
     }
 
     /**

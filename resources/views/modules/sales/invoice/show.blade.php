@@ -117,9 +117,9 @@
                         title="<span>{{ collect($invoice_status)->firstWhere('value',$invoice->payment_status)['help'] ?? null }}</span>" class="{{ collect($invoice_status)->firstWhere('value',$invoice->payment_status)['span_class'] ?? null }}" >{{ collect($invoice_status)->firstWhere('value',$invoice->payment_status)['label'] ?? null }}
                     </span> 
             <br>
-            <b>Valor Pago: </b> <span>{{$invoice->total_paid}}</span>
+            <b>Valor Pago: </b> <span> {{number_format($invoice->total_paid, 2, ',', '.')}}Kz</span>
             <br>
-            <b>Valor em Falta: </b> <span>{{$invoice->balance_due}}</span>
+            <b>Valor em Falta: </b> <span>{{number_format($invoice->balance_due, 2, ',', '.')}} Kz</span>
             <br>
 
             @if (session('sucesso'))

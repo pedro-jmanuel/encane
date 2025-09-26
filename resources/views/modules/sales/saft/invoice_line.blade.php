@@ -1,0 +1,24 @@
+<Line>
+    <LineNumber>{{$LineNumber}}</LineNumber>
+    <ProductCode>{{$ProductCode}}</ProductCode>
+    <ProductDescription>{{$ProductDescription}}</ProductDescription>
+    <Quantity>{{$Quantity}}</Quantity>
+    <UnitOfMeasure>{{$UnitOfMeasure}}</UnitOfMeasure>
+    <UnitPrice>{{$UnitPrice}}</UnitPrice>
+    <TaxPointDate>{{$TaxPointDate}}</TaxPointDate>
+    <References>
+        <Reference>{{$References['Reference']}}</Reference>
+        <Reason>{{$References['Reason']}}</Reason>
+    </References>
+    <Description>{{$Description}}</Description>
+    <DebitAmount>{{$DebitAmount}}</DebitAmount>
+    <CreditAmount>{{$CreditAmount}}</CreditAmount>
+    <Tax>
+        <TaxType>{{$Tax['TaxType']}}</TaxType>
+        <TaxCountryRegion>{{$Tax['TaxCountryRegion']}}</TaxCountryRegion>
+        <TaxCode>{{$Tax['TaxCode']}}</TaxCode>
+        <TaxPercentage>{{$Tax['TaxPercentage']}}</TaxPercentage>
+    </Tax>
+    <TaxExemptionReason>{{$TaxExemptionReason}}</TaxExemptionReason>
+    <TaxExemptionCode>{{$TaxExemptionCode}}</TaxExemptionCode>
+</Line>

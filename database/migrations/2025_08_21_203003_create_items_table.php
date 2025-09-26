@@ -19,13 +19,27 @@ return new class extends Migration
             $table->text('description')->nullable();
             $table->decimal('price', 15, 2);
             $table->decimal('cost', 15, 2)->default(0);
+
             $table->decimal('purchase_tax', 5, 2)->default(0); // percentagem
             $table->decimal('sales_tax', 5, 2)->default(0); // percentagem
+
+            $table->decimal('purchase_tax_amount', 5, 2)->default(0); 
+            $table->decimal('sales_tax_amount', 5, 2)->default(0);
+
+            $table->enum('purchase_tax_type', ['IVA', '15', 'NS']);
+            $table->enum('sales_tax_type', ['IVA', '15', 'NS']);
+
+            $table->enum('purchase_tax_code', ['NOR', 'ISE', 'OUT']); 
+            $table->enum('sales_tax_code',['NOR', 'ISE', 'OUT']);
+
             $table->enum('item_type', ['PRODUCT', 'SERVICE']);
+
             $table->foreignId('category_id')
                   ->nullable()
                   ->constrained('sales_categories')
                   ->nullOnDelete();
+
+
             $table->timestamps();
             $table->softDeletes();
         });

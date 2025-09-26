@@ -1,0 +1,13 @@
+<Customer>
+    <CustomerID>{{$CustomerID}}</CustomerID>
+    <AccountID>{{$AccountID}}</AccountID>
+    <CustomerTaxID>{{$CustomerTaxID}}</CustomerTaxID>
+    <CompanyName>{{$CompanyName}}</CompanyName>
+    <BillingAddress>
+        <AddressDetail>{{$BillingAddress['AddressDetail']}}</AddressDetail>
+        <City>{{$BillingAddress['City']}}</City>
+        <Province>{{$BillingAddress['Province']}}</Province>
+        <Country>{{$BillingAddress['Country']}}</Country>
+    </BillingAddress>
+    <SelfBillingIndicator>{{$SelfBillingIndicator}}</SelfBillingIndicator>
+</Customer>

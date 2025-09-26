@@ -66,24 +66,33 @@
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label" for="sales_tax">Taxa de imposto Venda(%)</label>
-                                <input name="sales_tax" type="number"
-                                    class="form-control @error('sales_tax') is-invalid @enderror" id="sales_tax"
-                                    placeholder="" />
-                                @error('sales_tax')
+                                <label for="item_type" class="form-label">Taxa de imposto Venda</label>
+                                <select name="sales_tax_id" class="form-select @error('sales_tax_id') is-invalid @enderror"
+                                    id="sales_tax_id" aria-label="Default select example">
+                                    <option value="" selected disabled >Selecione</option>
+                                    @foreach ($taxes as $tax)
+                                        <option value="{{$tax->id}}">{{$tax->type}}</option>
+                                    @endforeach
+                                </select>
+                                @error('sales_tax_id')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
 
                             <div class="mb-3 col-md-6">
-                                <label class="form-label" for="purchase_tax">Taxa de imposto Compra(%)</label>
-                                <input name="purchase_tax" type="number"
-                                    class="form-control @error('purchase_tax') is-invalid @enderror" id="purchase_tax"
-                                    placeholder="" />
-                                @error('purchase_tax')
+                                <label for="item_type" class="form-label">Taxa de imposto Compra</label>
+                                <select name="purchase_tax_id" class="form-select @error('purchase_tax_id') is-invalid @enderror"
+                                    id="purchase_tax_id" aria-label="Default select example">
+                                    <option value="" selected disabled >Selecione</option>
+                                    @foreach ($taxes as $tax)
+                                        <option  value="{{$tax->id}}">{{$tax->type}}</option>
+                                    @endforeach
+                                </select>
+                                @error('purchase_tax_id')
                                     <small class="text-danger">{{ $message }}</small>
                                 @enderror
                             </div>
+
 
                             <div class="mb-3 col-md-6">
                                 <label for="item_type" class="form-label">Tipo</label>

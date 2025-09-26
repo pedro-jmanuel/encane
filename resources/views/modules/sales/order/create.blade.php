@@ -200,7 +200,9 @@
                                         id="status" aria-label="Default select example">
                                         <option value="" selected disabled>Selecione</option>
                                         @foreach ($order_status as $status)
-                                            <option value="{{ $status['value'] }}"
+                                            <option value="{{ $status['value'] }}" @if ($status['value'] == 'COMPLETED')
+                                                selected
+                                            @endif
                                                 @if (old('status') == $status['value']) selected @endif>{{ $status['label'] }}
                                             </option>
                                         @endforeach

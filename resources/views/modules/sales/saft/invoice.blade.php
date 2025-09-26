@@ -1,0 +1,27 @@
+ <Invoice>
+     <InvoiceNo>{{$InvoiceNo}}</InvoiceNo>
+     <DocumentStatus>
+         <InvoiceStatus>{{$DocumentStatus['InvoiceStatus']}}</InvoiceStatus>
+         <InvoiceStatusDate>{{$DocumentStatus['InvoiceStatus']}}</InvoiceStatusDate>
+         <SourceID>{{$DocumentStatus['InvoiceStatus']}}</SourceID>
+         <SourceBilling>{{$DocumentStatus['InvoiceStatus']}}</SourceBilling>
+     </DocumentStatus>
+     <Hash>>{{$Hash}}</Hash>
+     <HashControl>{{$HashControl}}</HashControl>
+     <Period>{{$Period}}</Period>
+     <InvoiceDate>{{$InvoiceDate}}</InvoiceDate>
+     <InvoiceType>{{$InvoiceType}}</InvoiceType>
+     <SpecialRegimes>
+         <SelfBillingIndicator>{{$SpecialRegimes['SelfBillingIndicator']}}</SelfBillingIndicator>
+         <CashVATSchemeIndicator>{{$SpecialRegimes['CashVATSchemeIndicator']}}</CashVATSchemeIndicator>
+         <ThirdPartiesBillingIndicator>{{$SpecialRegimes['ThirdPartiesBillingIndicator']}}</ThirdPartiesBillingIndicator>
+     </SpecialRegimes>
+     <SourceID>{{$SourceID}}</SourceID>
+     <SystemEntryDate>{{$SystemEntryDate}}</SystemEntryDate>
+     <CustomerID>{{$CustomerID}}</CustomerID>
+     <DocumentTotals>
+         <TaxPayable>{{$DocumentTotals['TaxPayable']}}</TaxPayable>
+         <NetTotal>{{$DocumentTotals['NetTotal']}}</NetTotal>
+         <GrossTotal>{{$DocumentTotals['GrossTotal']}}</GrossTotal>
+     </DocumentTotals>
+</Invoice>

@@ -21,8 +21,16 @@ class Item extends Model
         "purchase_tax",
         "sales_tax",
         "item_type",
-        "category_id"
+        "category_id",
+        "purchase_tax_amount",
+        "sales_tax_amount",
+        "purchase_tax_type",
+        "sales_tax_type",
+        "purchase_tax_code",
+        "sales_tax_code"
      ];
+
+   
 
     public function category()
     {
